@@ -1,7 +1,10 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Plus, Mic, MoreHorizontal, MessageSquare, Menu, X, Sparkles, Clock, Sun, Moon, ArrowRight } from 'lucide-react';
+import { Plus, Mic, MoreHorizontal, MessageSquare, Menu, X, Sparkles, Clock, Sun, Moon, ArrowRight, LogOut, Settings } from 'lucide-react';
+import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
+import { chatService, Conversation, MessageDTO } from '@/services/chatService';
 
 interface Message {
   id: string;
@@ -10,22 +13,17 @@ interface Message {
   timestamp: Date;
 }
 
-interface ChatHistory {
-  id: string;
-  title: string;
-  timestamp: Date;
-}
-
 export default function ChatPage() {
+  const { user, isAuthenticated, logout } = useAuth();
+  const router = useRouter();
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [chatHistory] = useState<ChatHistory[]>([
-    { id: '1', title: 'Conversa anterior 1', timestamp: new Date(Date.now() - 86400000) },
-    { id: '2', title: 'Conversa anterior 2', timestamp: new Date(Date.now() - 172800000) },
-  ]);
+  const [conversations, setConversations] = useState<Conversation[]>([]);
+  const [selectedConversation, setSelectedConversation] = useState<Conversation>();
+  const [isLoadingConversations, setIsLoadingConversations] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
@@ -60,9 +58,73 @@ export default function ChatPage() {
     scrollToBottom();
   }, [messages]);
 
+  // Carregar conversas ao montar o componente
+  useEffect(() => {
+    if (user?.chatId) {
+      loadConversations();
+    }
+  }, [user]);
+
+  // Carregar mensagens quando uma conversa é selecionada
+  useEffect(() => {
+    if (selectedConversation) {
+      loadMessages(selectedConversation.id);
+    }
+  }, [selectedConversation]);
+
+  const loadConversations = async () => {
+    if (!user?.chatId) return;
+
+    setIsLoadingConversations(true);
+    try {
+      const data = await chatService.listConversations(user.chatId);
+      setConversations(data);
+    } catch (error: any) {
+      console.error('Erro ao carregar conversas:', error);
+    } finally {
+      setIsLoadingConversations(false);
+    }
+  };
+
+  const loadMessages = async (conversationId: string) => {
+    setIsLoading(true);
+    try {
+      const data = await chatService.getMessages(conversationId);
+      const formattedMessages: Message[] = data.map((msg: any) => ({
+        id: msg.id,
+        role: msg.role,
+        content: msg.content,
+        timestamp: new Date(msg.timestamp),
+      }));
+      setMessages(formattedMessages);
+    } catch (error: any) {
+      console.error('Erro ao carregar mensagens:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!input.trim() || isLoading) return;
+    if (!input.trim() || isLoading || !user?.chatId) return;
+
+    let conversationToUse = selectedConversation || null;
+
+    // Se não houver conversa selecionada, criar uma nova
+    // if (!conversationToUse) {
+    //   try {
+    //     const newConversation = await chatService.createConversation(
+    //       user.chatId,
+    //       'Nova conversa'
+    //     );
+    //     setConversations((prev) => [newConversation, ...prev]);
+    //     setSelectedConversation(newConversation);
+    //     conversationToUse = newConversation;
+    //   } catch (error: any) {
+    //     console.error('Erro ao criar nova conversa:', error);
+    //     return;
+    //   }
+    // }
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -71,26 +133,95 @@ export default function ChatPage() {
       timestamp: new Date(),
     };
 
+    const userInput = input;
     setMessages((prev) => [...prev, userMessage]);
     setInput('');
     setIsLoading(true);
 
-    setTimeout(() => {
+    try {
+      // Envia a mensagem para o backend
+      const response = await chatService.ask(user.chatId, conversationToUse?.id, {
+        text: userInput,
+        userId: user.id,
+      });
+
+      // Se não havia conversa selecionada e o backend criou uma nova
+      if (!conversationToUse && response.conversationId) {
+        // Recarrega a lista de conversas
+        const updatedConversations = await chatService.listConversations(user.chatId);
+        setConversations(updatedConversations);
+
+        // Seleciona a nova conversa
+        const newConversation = updatedConversations.find(c => c.id === response.conversationId);
+        if (newConversation) {
+          setSelectedConversation(newConversation);
+        }
+      }
+
       const aiMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
-        content: 'Esta é uma resposta simulada da IA. Você pode integrar aqui sua API de IA preferida (OpenAI, Anthropic, Google, etc).',
+        content: response.answer,
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, aiMessage]);
+    } catch (error: any) {
+      // Em caso de erro, mostra uma mensagem de erro
+      const errorMessage: Message = {
+        id: (Date.now() + 1).toString(),
+        role: 'assistant',
+        content: `Desculpe, ocorreu um erro ao processar sua mensagem: ${error.message}`,
+        timestamp: new Date(),
+      };
+      setMessages((prev) => [...prev, errorMessage]);
+    } finally {
       setIsLoading(false);
-    }, 1000);
+    }
   };
 
-  const handleNewChat = () => {
-    setMessages([]);
+  const handleNewChat = async () => {
+    console.log('handleNewChat chamado');
+    console.log('user:', user);
+    console.log('user.chatId:', user?.chatId);
+
+    if (!user?.chatId) {
+      console.error('Usuário não autenticado ou chatId não encontrado');
+      alert('Erro: Usuário não autenticado. Por favor, faça login novamente.');
+      return;
+    }
+
+    try {
+      console.log('Criando nova conversa com chatId:', user.chatId);
+      const newConversation = await chatService.createConversation(
+        user.chatId,
+        'Nova conversa'
+      );
+      console.log('Nova conversa criada:', newConversation);
+
+      setConversations((prev) => [newConversation, ...prev]);
+      setSelectedConversation(newConversation);
+      setMessages([]);
+      setIsSidebarOpen(false);
+      inputRef.current?.focus();
+    } catch (error: any) {
+      console.error('Erro ao criar nova conversa:', error);
+      alert(`Erro ao criar nova conversa: ${error.message}`);
+    }
+  };
+
+  const handleSelectConversation = (conversation: Conversation) => {
+    setSelectedConversation(conversation);
     setIsSidebarOpen(false);
-    inputRef.current?.focus();
+  };
+
+  const handleLogout = () => {
+    logout();
+    router.push('/');
+  };
+
+  const handleSettings = () => {
+    // Implementar navegação para página de configurações
+    console.log('Abrir configurações');
   };
 
   return (
@@ -147,50 +278,89 @@ export default function ChatPage() {
           <h2 className="text-xs font-semibold text-gray-700 dark:text-gray-300 uppercase tracking-wide mb-3 px-2">
             Histórico
           </h2>
-          <div className="space-y-2">
-            {chatHistory.map((chat) => (
-              <button
-                key={chat.id}
-                className="w-full flex items-start gap-3 p-3 rounded-lg hover:bg-yellow-600/20 dark:hover:bg-[#FFDE14]/10 transition-colors text-left group border border-transparent dark:border-[#FFDE14]/0 dark:hover:border-[#FFDE14]/20"
-              >
-                <MessageSquare className="w-4 h-4 text-gray-700 dark:text-[#FFDE14] mt-0.5 flex-shrink-0" />
-                <div className="flex-1 min-w-0">
-                  <p className="text-sm font-medium text-gray-900 dark:text-white truncate group-hover:text-gray-800 dark:group-hover:text-[#FFDE14]">
-                    {chat.title}
-                  </p>
-                  <p className="text-xs text-gray-600 dark:text-gray-400 flex items-center gap-1 mt-0.5">
-                    <Clock className="w-3 h-3" />
-                    {chat.timestamp.toLocaleDateString('pt-BR')}
-                  </p>
-                </div>
-              </button>
-            ))}
-          </div>
+          {isLoadingConversations ? (
+            <div className="flex justify-center py-4">
+              <div className="w-6 h-6 border-2 border-gray-700 dark:border-[#FFDE14] border-t-transparent rounded-full animate-spin" />
+            </div>
+          ) : (
+            <div className="space-y-2">
+              {conversations.length === 0 ? (
+                <p className="text-xs text-gray-600 dark:text-gray-400 text-center py-4">
+                  Nenhuma conversa ainda
+                </p>
+              ) : (
+                conversations.map((conversation) => (
+                  <button
+                    key={conversation.id}
+                    onClick={() => handleSelectConversation(conversation)}
+                    className={`w-full flex items-start gap-3 p-3 rounded-lg hover:bg-yellow-600/20 dark:hover:bg-[#FFDE14]/10 transition-colors text-left group border ${
+                      selectedConversation?.id === conversation.id
+                        ? 'bg-yellow-600/20 dark:bg-[#FFDE14]/10 border-white/30 dark:border-[#FFDE14]/20'
+                        : 'border-white/0 dark:border-[#FFDE14]/0 hover:border-white/30 dark:hover:border-[#FFDE14]/20'
+                    }`}
+                  >
+                    <MessageSquare className="w-4 h-4 text-gray-700 dark:text-[#FFDE14] mt-0.5 flex-shrink-0" />
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-medium text-gray-900 dark:text-white truncate group-hover:text-gray-800 dark:group-hover:text-[#FFDE14]">
+                        {conversation.title}
+                      </p>
+                      <p className="text-xs text-gray-600 dark:text-gray-400 flex items-center gap-1 mt-0.5">
+                        <MessageSquare className="w-3 h-3" />
+                        Conversa
+                      </p>
+                    </div>
+                  </button>
+                ))
+              )}
+            </div>
+          )}
         </div>
 
         <div className="p-4 border-t border-[#E6C800]/20 dark:border-gray-800 space-y-3">
           <button
             onClick={toggleTheme}
-            className="w-full flex items-center justify-between p-3 rounded-lg bg-[#E6C800]/20 dark:bg-[#FFDE14]/10 hover:bg-[#E6C800]/30 dark:hover:bg-[#FFDE14]/20 transition-colors"
+            className="w-full flex items-center justify-between p-3 rounded-lg bg-gray-900/90 dark:bg-[#FFDE14]/10 hover:bg-gray-900 dark:hover:bg-[#FFDE14]/20 transition-colors border border-white/20 dark:border-transparent"
             aria-label="Alternar tema"
           >
-            <span className="text-sm font-medium text-gray-800 dark:text-white">
+            <span className="text-sm font-medium text-white dark:text-white">
               {isDarkMode ? 'Tema Escuro' : 'Tema Claro'}
             </span>
-            <div className="relative w-12 h-6 bg-gray-900 dark:bg-[#FFDE14] rounded-full transition-colors">
-              <div className={`absolute top-1 ${isDarkMode ? 'right-1' : 'left-1'} w-4 h-4 bg-white rounded-full transition-all duration-300 flex items-center justify-center`}>
+            <div className="relative w-12 h-6 bg-white dark:bg-[#FFDE14] rounded-full transition-colors">
+              <div className={`absolute top-1 ${isDarkMode ? 'right-1' : 'left-1'} w-4 h-4 bg-gray-900 dark:bg-white rounded-full transition-all duration-300 flex items-center justify-center`}>
                 {isDarkMode ? (
-                  <Moon className="w-3 h-3 text-gray-900" />
+                  <Moon className="w-3 h-3 text-white dark:text-gray-900" />
                 ) : (
-                  <Sun className="w-3 h-3 text-[#FFDE14]" />
+                  <Sun className="w-3 h-3 text-white" />
                 )}
               </div>
             </div>
           </button>
 
-          <div className="bg-[#E6C800]/20 dark:bg-[#FFDE14]/10 rounded-lg p-3 border border-transparent dark:border-[#FFDE14]/20">
-            <p className="text-xs font-medium text-gray-800 dark:text-white mb-1">💡 Dica do dia</p>
-            <p className="text-xs text-gray-700 dark:text-gray-300">
+          <button
+            onClick={handleSettings}
+            className="w-full flex items-center justify-between p-3 rounded-lg bg-gray-900/90 dark:bg-[#FFDE14]/10 hover:bg-gray-900 dark:hover:bg-[#FFDE14]/20 transition-colors border border-white/20 dark:border-transparent"
+            aria-label="Configurações"
+          >
+            <span className="text-sm font-medium text-white dark:text-white">
+              Configurações
+            </span>
+            <Settings className="w-5 h-5 text-white dark:text-white" />
+          </button>
+
+          <button
+            onClick={handleLogout}
+            className="w-full flex items-center justify-between p-3 rounded-lg bg-red-600/90 dark:bg-red-600/90 hover:bg-red-700 dark:hover:bg-red-700 transition-colors border border-red-500/50 dark:border-red-500/50"
+            aria-label="Sair"
+          >
+            <span className="text-sm font-medium text-white">
+              Sair
+            </span>
+            <LogOut className="w-5 h-5 text-white" />
+          </button>
+
+          <div className="bg-gray-900/90 dark:bg-[#FFDE14]/10 rounded-lg p-3 border border-white/20 dark:border-[#FFDE14]/20">
+            <p className="text-xs font-medium text-white dark:text-white mb-1">💡 Dica do dia</p>
+            <p className="text-xs text-gray-300 dark:text-gray-300">
               Use comandos específicos para obter respostas mais precisas!
             </p>
           </div>
