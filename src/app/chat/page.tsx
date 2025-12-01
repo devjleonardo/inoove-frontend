@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Plus, Mic, MoreHorizontal, MessageSquare, Menu, X, Sparkles, Clock, Sun, Moon } from 'lucide-react';
+import { Plus, Mic, MoreHorizontal, MessageSquare, Menu, X, Sparkles, Clock, Sun, Moon, ArrowRight } from 'lucide-react';
 
 interface Message {
   id: string;
@@ -252,53 +252,83 @@ export default function ChatPage() {
               </div>
             </div>
           ) : (
-            <div className="max-w-3xl w-full mx-auto px-4 py-6 space-y-6">
+            <div className="max-w-6xl mx-auto px-4 py-8 space-y-6">
               {messages.map((message) => (
                 <div
                   key={message.id}
-                  className={`flex gap-3 ${
+                  className={`flex ${
                     message.role === 'user' ? 'justify-end' : 'justify-start'
-                  } animate-in fade-in slide-in-from-bottom-4 duration-300`}
+                  } animate-in fade-in slide-in-from-bottom-4 duration-500`}
                 >
-                  {message.role === 'assistant' && (
-                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-900 to-gray-800 dark:from-[#FFDE14] dark:to-[#E6C800] flex items-center justify-center flex-shrink-0 shadow-lg">
-                      <Sparkles className="w-4 h-4 text-[#FFDE14] dark:text-gray-900" />
+                  <div className={`flex gap-4 max-w-[90%] md:max-w-[48%] ${message.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+                    <div className="relative flex-shrink-0">
+                      <div
+                        className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-lg ${
+                          message.role === 'user'
+                            ? 'bg-gradient-to-br from-gray-800 to-gray-900 dark:from-[#FFDE14] dark:to-[#E6C800]'
+                            : 'bg-gradient-to-br from-gray-800 to-gray-900 dark:from-[#FFDE14] dark:to-[#E6C800]'
+                        }`}
+                      >
+                        {message.role === 'assistant' ? (
+                          <Sparkles className="w-5 h-5 text-[#FFDE14] dark:text-black" />
+                        ) : (
+                          <span className="text-white dark:text-black font-bold text-sm">U</span>
+                        )}
+                      </div>
+                      {message.role === 'assistant' && (
+                        <div className="absolute -bottom-0.5 -right-0.5 w-3 h-3 bg-green-500 rounded-full border-2 border-white dark:border-black" />
+                      )}
                     </div>
-                  )}
-                  <div
-                    className={`max-w-[85%] sm:max-w-[75%] rounded-2xl px-4 py-3 shadow-lg ${
-                      message.role === 'user'
-                        ? 'bg-gray-900 dark:bg-[#FFDE14] text-white dark:text-gray-900'
-                        : 'bg-white/95 dark:bg-gray-800/95 text-gray-900 dark:text-gray-100 backdrop-blur-sm border border-transparent dark:border-gray-700'
-                    }`}
-                  >
-                    <p className="text-sm sm:text-base leading-relaxed whitespace-pre-wrap">
-                      {message.content}
-                    </p>
-                    <time className="text-xs opacity-60 mt-2 block">
-                      {message.timestamp.toLocaleTimeString('pt-BR', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </time>
+
+                    <div className="flex flex-col min-w-0">
+                      <div className={`flex items-center gap-2 mb-2 ${message.role === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+                        <span className="font-bold text-sm text-gray-900 dark:text-white">
+                          {message.role === 'assistant' ? 'ASKIA' : 'Você'}
+                        </span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">
+                          {message.timestamp.toLocaleTimeString('pt-BR', {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                          })}
+                        </span>
+                      </div>
+
+                      <div
+                        className={`p-4 rounded-2xl ${
+                          message.role === 'user'
+                            ? 'bg-gray-900 dark:bg-[#FFDE14] text-white dark:text-black'
+                            : 'bg-white dark:bg-gray-800 text-gray-900 dark:text-white border border-gray-200 dark:border-gray-700'
+                        } shadow-lg inline-block`}
+                      >
+                        <p className="text-base leading-relaxed whitespace-pre-wrap">
+                          {message.content}
+                        </p>
+                      </div>
+                    </div>
                   </div>
-                  {message.role === 'user' && (
-                    <div className="w-8 h-8 rounded-full bg-gray-900 dark:bg-[#FFDE14] flex items-center justify-center flex-shrink-0 shadow-lg">
-                      <span className="text-white dark:text-gray-900 text-sm font-bold">U</span>
-                    </div>
-                  )}
                 </div>
               ))}
+
               {isLoading && (
-                <div className="flex gap-3 justify-start animate-in fade-in slide-in-from-bottom-4 duration-300">
-                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-900 to-gray-800 dark:from-[#FFDE14] dark:to-[#E6C800] flex items-center justify-center flex-shrink-0 shadow-lg">
-                    <Sparkles className="w-4 h-4 text-[#FFDE14] dark:text-gray-900" />
-                  </div>
-                  <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-sm rounded-2xl px-4 py-3 shadow-lg border border-transparent dark:border-gray-700">
-                    <div className="flex gap-1">
-                      <div className="w-2 h-2 bg-gray-600 dark:bg-[#FFDE14] rounded-full animate-bounce" />
-                      <div className="w-2 h-2 bg-gray-600 dark:bg-[#FFDE14] rounded-full animate-bounce [animation-delay:0.2s]" />
-                      <div className="w-2 h-2 bg-gray-600 dark:bg-[#FFDE14] rounded-full animate-bounce [animation-delay:0.4s]" />
+                <div className="flex justify-start animate-in fade-in slide-in-from-bottom-4 duration-500">
+                  <div className="flex gap-4 max-w-[90%] md:max-w-[48%]">
+                    <div className="relative flex-shrink-0">
+                      <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg bg-gradient-to-br from-gray-800 to-gray-900 dark:from-[#FFDE14] dark:to-[#E6C800] animate-pulse">
+                        <Sparkles className="w-5 h-5 text-[#FFDE14] dark:text-black" />
+                      </div>
+                    </div>
+                    <div className="flex flex-col min-w-0">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="font-bold text-sm text-gray-900 dark:text-white">ASKIA</span>
+                        <span className="text-xs text-gray-500 dark:text-gray-400">digitando...</span>
+                      </div>
+                      <div className="p-4 rounded-2xl bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 shadow-lg inline-block">
+                        <div className="flex gap-2">
+                          <div className="w-2.5 h-2.5 bg-gray-400 dark:bg-[#FFDE14] rounded-full animate-bounce" />
+                          <div className="w-2.5 h-2.5 bg-gray-400 dark:bg-[#FFDE14] rounded-full animate-bounce [animation-delay:0.2s]" />
+                          <div className="w-2.5 h-2.5 bg-gray-400 dark:bg-[#FFDE14] rounded-full animate-bounce [animation-delay:0.4s]" />
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -308,51 +338,57 @@ export default function ChatPage() {
           )}
         </div>
 
-        <div className="p-4 md:p-6 border-t border-[#E6C800]/30 dark:border-gray-800 bg-[#FFDE14]/30 dark:bg-black/30 backdrop-blur-sm">
-          <div className="max-w-3xl mx-auto">
-            <form onSubmit={handleSubmit} className="relative">
-              <input
-                ref={inputRef}
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder="Diga algo..."
-                disabled={isLoading}
-                className="w-full pl-6 pr-32 py-4 rounded-3xl bg-white/95 dark:bg-[#FFDE14] backdrop-blur-sm text-gray-900 dark:text-gray-900 placeholder-gray-500 dark:placeholder-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-900/20 dark:focus:ring-[#FFEA5F] disabled:opacity-50 disabled:cursor-not-allowed shadow-xl transition-all border border-transparent dark:border-[#E6C800]"
-                aria-label="Digite sua mensagem"
-              />
-              <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-1">
+        <div className="p-6 border-t border-[#E6C800]/30 dark:border-gray-800 bg-gradient-to-t from-white to-transparent dark:from-black dark:to-transparent">
+          <div className="max-w-4xl mx-auto">
+            <form onSubmit={handleSubmit} className="relative group">
+              <div className="absolute inset-0 bg-gradient-to-r from-[#FFDE14] to-[#E6C800] dark:from-[#FFDE14] dark:to-[#E6C800] rounded-3xl blur-xl opacity-20 group-hover:opacity-30 transition-opacity" />
+
+              <div className="relative flex items-center gap-3 p-2 rounded-3xl bg-white dark:bg-[#1a1a1a] border-2 border-gray-200 dark:border-[#FFDE14]/30 shadow-2xl">
                 <button
                   type="button"
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-[#E6C800] rounded-full transition-colors disabled:opacity-50"
+                  className="p-3 hover:bg-gray-100 dark:hover:bg-[#FFDE14]/20 rounded-2xl transition-all disabled:opacity-50 group/btn"
                   disabled={isLoading}
                   aria-label="Adicionar anexo"
                   title="Adicionar anexo"
                 >
-                  <Plus className="w-5 h-5 text-gray-600 dark:text-gray-900" />
+                  <Plus className="w-5 h-5 text-gray-600 dark:text-[#FFDE14] group-hover/btn:scale-110 transition-transform" />
                 </button>
-                <button
-                  type="button"
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-[#E6C800] rounded-full transition-colors disabled:opacity-50"
+
+                <input
+                  ref={inputRef}
+                  type="text"
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  placeholder="Pergunte algo à ASKIA..."
                   disabled={isLoading}
-                  aria-label="Mais opções"
-                  title="Mais opções"
-                >
-                  <MoreHorizontal className="w-5 h-5 text-gray-600 dark:text-gray-900" />
-                </button>
+                  className="flex-1 px-4 py-4 bg-transparent text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:outline-none text-base disabled:opacity-50"
+                  aria-label="Digite sua mensagem"
+                />
+
                 <button
                   type="button"
-                  className="p-2 hover:bg-gray-100 dark:hover:bg-[#E6C800] rounded-full transition-colors disabled:opacity-50"
+                  className="p-3 hover:bg-gray-100 dark:hover:bg-[#FFDE14]/20 rounded-2xl transition-all disabled:opacity-50 group/btn"
                   disabled={isLoading}
                   aria-label="Mensagem de voz"
                   title="Mensagem de voz"
                 >
-                  <Mic className="w-5 h-5 text-gray-600 dark:text-gray-900" />
+                  <Mic className="w-5 h-5 text-gray-600 dark:text-[#FFDE14] group-hover/btn:scale-110 transition-transform" />
+                </button>
+
+                <button
+                  type="submit"
+                  disabled={!input.trim() || isLoading}
+                  className="p-3 rounded-2xl bg-gradient-to-br from-gray-900 to-gray-800 dark:from-[#FFDE14] dark:to-[#E6C800] hover:scale-105 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 transition-all shadow-lg"
+                  aria-label="Enviar mensagem"
+                >
+                  <ArrowRight className="w-5 h-5 text-white dark:text-black" />
                 </button>
               </div>
             </form>
-            <p className="text-xs text-gray-800/70 dark:text-gray-400/70 text-center mt-3">
-              A ASKIA pode cometer erros. Considere verificar informações importantes.
+
+            <p className="text-xs text-gray-500 dark:text-gray-400 text-center mt-4 flex items-center justify-center gap-2">
+              <span className="inline-block w-2 h-2 bg-green-500 rounded-full animate-pulse" />
+              A ASKIA pode cometer erros. Verifique informações importantes.
             </p>
           </div>
         </div>
