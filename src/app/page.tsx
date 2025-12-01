@@ -36,7 +36,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FFDE14] via-[#FFEA5F] to-[#E6C800] dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 transition-colors duration-300 flex items-center justify-center p-4 relative">
+    <div className="min-h-screen bg-gradient-to-br from-[#FFDE14] via-[#FFEA5F] to-[#E6C800] dark:from-black dark:via-black dark:to-black transition-colors duration-300 flex items-center justify-center p-4 relative">
       <button
         onClick={toggleTheme}
         className="fixed top-4 right-4 z-50 p-3 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all hover:scale-110 active:scale-95"
@@ -90,7 +90,7 @@ export default function LoginPage() {
               <h3 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 dark:text-white leading-tight">
                 Descubra.
               </h3>
-              <h3 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-blue-600 dark:text-blue-500 leading-tight">
+              <h3 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-blue-600 dark:text-white leading-tight">
                 Resolva.
               </h3>
             </div>
