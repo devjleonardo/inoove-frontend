@@ -22,7 +22,7 @@ export default function ChatPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
   const [conversations, setConversations] = useState<Conversation[]>([]);
-  const [selectedConversation, setSelectedConversation] = useState<Conversation>();
+  const [selectedConversation, setSelectedConversation] = useState<Conversation | null>();
   const [isLoadingConversations, setIsLoadingConversations] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -58,14 +58,12 @@ export default function ChatPage() {
     scrollToBottom();
   }, [messages]);
 
-  // Carregar conversas ao montar o componente
   useEffect(() => {
     if (user?.chatId) {
       loadConversations();
     }
   }, [user]);
 
-  // Carregar mensagens quando uma conversa é selecionada
   useEffect(() => {
     if (selectedConversation) {
       loadMessages(selectedConversation.id);
@@ -89,7 +87,7 @@ export default function ChatPage() {
   const loadMessages = async (conversationId: string) => {
     setIsLoading(true);
     try {
-      const data = await chatService.getMessages(conversationId);
+      const data = await chatService.getMessages(user!.chatId, conversationId);
       const formattedMessages: Message[] = data.map((msg: any) => ({
         id: msg.id,
         role: msg.role,
@@ -110,22 +108,6 @@ export default function ChatPage() {
 
     let conversationToUse = selectedConversation || null;
 
-    // Se não houver conversa selecionada, criar uma nova
-    // if (!conversationToUse) {
-    //   try {
-    //     const newConversation = await chatService.createConversation(
-    //       user.chatId,
-    //       'Nova conversa'
-    //     );
-    //     setConversations((prev) => [newConversation, ...prev]);
-    //     setSelectedConversation(newConversation);
-    //     conversationToUse = newConversation;
-    //   } catch (error: any) {
-    //     console.error('Erro ao criar nova conversa:', error);
-    //     return;
-    //   }
-    // }
-
     const userMessage: Message = {
       id: Date.now().toString(),
       role: 'user',
@@ -139,19 +121,15 @@ export default function ChatPage() {
     setIsLoading(true);
 
     try {
-      // Envia a mensagem para o backend
       const response = await chatService.ask(user.chatId, conversationToUse?.id, {
         text: userInput,
         userId: user.id,
       });
 
-      // Se não havia conversa selecionada e o backend criou uma nova
       if (!conversationToUse && response.conversationId) {
-        // Recarrega a lista de conversas
         const updatedConversations = await chatService.listConversations(user.chatId);
         setConversations(updatedConversations);
 
-        // Seleciona a nova conversa
         const newConversation = updatedConversations.find(c => c.id === response.conversationId);
         if (newConversation) {
           setSelectedConversation(newConversation);
@@ -166,7 +144,6 @@ export default function ChatPage() {
       };
       setMessages((prev) => [...prev, aiMessage]);
     } catch (error: any) {
-      // Em caso de erro, mostra uma mensagem de erro
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
@@ -179,34 +156,11 @@ export default function ChatPage() {
     }
   };
 
-  const handleNewChat = async () => {
-    console.log('handleNewChat chamado');
-    console.log('user:', user);
-    console.log('user.chatId:', user?.chatId);
-
-    if (!user?.chatId) {
-      console.error('Usuário não autenticado ou chatId não encontrado');
-      alert('Erro: Usuário não autenticado. Por favor, faça login novamente.');
-      return;
-    }
-
-    try {
-      console.log('Criando nova conversa com chatId:', user.chatId);
-      const newConversation = await chatService.createConversation(
-        user.chatId,
-        'Nova conversa'
-      );
-      console.log('Nova conversa criada:', newConversation);
-
-      setConversations((prev) => [newConversation, ...prev]);
-      setSelectedConversation(newConversation);
-      setMessages([]);
-      setIsSidebarOpen(false);
-      inputRef.current?.focus();
-    } catch (error: any) {
-      console.error('Erro ao criar nova conversa:', error);
-      alert(`Erro ao criar nova conversa: ${error.message}`);
-    }
+  const handleNewChat = () => {
+    setSelectedConversation(null);
+    setMessages([]);
+    setIsSidebarOpen(false);
+    inputRef.current?.focus();
   };
 
   const handleSelectConversation = (conversation: Conversation) => {
@@ -220,7 +174,6 @@ export default function ChatPage() {
   };
 
   const handleSettings = () => {
-    // Implementar navegação para página de configurações
     console.log('Abrir configurações');
   };
 
@@ -304,9 +257,14 @@ export default function ChatPage() {
                       <p className="text-sm font-medium text-gray-900 dark:text-white truncate group-hover:text-gray-800 dark:group-hover:text-[#FFDE14]">
                         {conversation.title}
                       </p>
-                      <p className="text-xs text-gray-600 dark:text-gray-400 flex items-center gap-1 mt-0.5">
-                        <MessageSquare className="w-3 h-3" />
-                        Conversa
+                      <p className="text-xs text-gray-600 dark:text-gray-400 mt-0.5">
+                        {conversation.updatedAt ? new Date(conversation.updatedAt).toLocaleString('pt-BR', {
+                          day: '2-digit',
+                          month: '2-digit',
+                          year: 'numeric',
+                          hour: '2-digit',
+                          minute: '2-digit'
+                        }) : 'Sem data'}
                       </p>
                     </div>
                   </button>
@@ -456,10 +414,22 @@ export default function ChatPage() {
                           {message.role === 'assistant' ? 'ASKIA' : 'Você'}
                         </span>
                         <span className="text-xs text-gray-500 dark:text-gray-400">
-                          {message.timestamp.toLocaleTimeString('pt-BR', {
-                            hour: '2-digit',
-                            minute: '2-digit',
-                          })}
+                          {message.timestamp instanceof Date
+                            ? message.timestamp.toLocaleString('pt-BR', {
+                                day: '2-digit',
+                                month: '2-digit',
+                                year: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                              })
+                            : new Date(message.timestamp).toLocaleString('pt-BR', {
+                                day: '2-digit',
+                                month: '2-digit',
+                                year: 'numeric',
+                                hour: '2-digit',
+                                minute: '2-digit'
+                              })
+                          }
                         </span>
                       </div>
 

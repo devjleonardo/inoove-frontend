@@ -17,7 +17,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Carregar usuário do localStorage ao iniciar
     const storedUser = localStorage.getItem('askia-user');
     if (storedUser) {
       try {
@@ -52,7 +51,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   };
 
   if (isLoading) {
-    return null; // ou um componente de loading
+    return null;
   }
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

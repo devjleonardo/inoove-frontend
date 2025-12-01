@@ -3,6 +3,8 @@ import api from './api';
 export interface Conversation {
   id: string;
   title: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface MessageDTO {
@@ -27,7 +29,7 @@ export interface AskResponseDTO {
 export const chatService = {
   async listConversations(chatId: string): Promise<Conversation[]> {
     try {
-      const response = await api.get<Conversation[]>(`v1/chat/${chatId}/list-conversations`);
+      const response = await api.get<Conversation[]>(`v1/chat/${chatId}/conversations`);
       return response.data;
     } catch (error: any) {
       if (error.response) {
@@ -40,9 +42,9 @@ export const chatService = {
     }
   },
 
-  async getMessages(conversationId: string): Promise<MessageDTO[]> {
+  async getMessages(chatId: string, conversationId: string): Promise<MessageDTO[]> {
     try {
-      const response = await api.get<MessageDTO[]>(`v1/conversations/${conversationId}/messages`);
+      const response = await api.get<MessageDTO[]>(`v1/chat/${chatId}/conversations/${conversationId}/messages`);
       return response.data;
     } catch (error: any) {
       if (error.response) {
@@ -56,27 +58,18 @@ export const chatService = {
   },
 
   async createConversation(chatId: string, title: string): Promise<Conversation> {
-    console.log('conversationService.createConversation chamado');
-    console.log('Dados:', { chatId, title });
-
     try {
-      console.log('Enviando POST para v1/conversations');
       const response = await api.post<Conversation>(`v1/chat/${chatId}/create-conversation`, {
         title,
         chatId,
       });
-      console.log('Resposta recebida:', response.data);
       return response.data;
     } catch (error: any) {
-      console.error('Erro na requisição:', error);
       if (error.response) {
-        console.error('Erro do servidor:', error.response.data);
         throw new Error(error.response.data.message || 'Erro ao criar conversa');
       } else if (error.request) {
-        console.error('Sem resposta do servidor');
         throw new Error('Não foi possível conectar ao servidor');
       } else {
-        console.error('Erro ao configurar requisição:', error.message);
         throw new Error('Erro ao processar requisição');
       }
     }
@@ -92,13 +85,10 @@ export const chatService = {
       return response.data;
     } catch (error: any) {
       if (error.response) {
-        // O servidor respondeu com um status de erro
         throw new Error(error.response.data.message || 'Erro ao processar mensagem');
       } else if (error.request) {
-        // A requisição foi feita mas não houve resposta
         throw new Error('Não foi possível conectar ao servidor');
       } else {
-        // Algo aconteceu ao configurar a requisição
         throw new Error('Erro ao processar requisição');
       }
     }

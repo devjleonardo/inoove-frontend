@@ -76,10 +76,8 @@ export default function RegisterPage() {
           password: password.trim(),
         });
 
-        // Salvar dados do usuário no contexto global
         setUser(userData);
 
-        // Sucesso - redireciona para o chat
         router.push('/chat');
       } catch (error: any) {
         setApiError(error.message || 'Erro ao criar conta. Tente novamente.');
