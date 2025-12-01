@@ -49,6 +49,11 @@ export default {
   				'3': 'hsl(var(--chart-3))',
   				'4': 'hsl(var(--chart-4))',
   				'5': 'hsl(var(--chart-5))'
+  			},
+  			askia: {
+  				yellow: '#FFDE14',
+  				'yellow-light': '#FFEA5F',
+  				'yellow-dark': '#E6C800'
   			}
   		},
   		borderRadius: {
