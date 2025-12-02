@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Sparkles, ArrowRight, Zap, Brain, MessageCircle, Sun, Moon } from 'lucide-react';
 import { authService } from '@/services/authService';
 import { useAuth } from '@/contexts/AuthContext';
+import Image from 'next/image';
 
 export default function LoginPage() {
   const [isDarkMode, setIsDarkMode] = useState(false);
@@ -80,23 +81,31 @@ export default function LoginPage() {
 
       <div className="relative w-full max-w-6xl mx-auto grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
         <div className="text-center lg:text-left space-y-8 order-2 lg:order-1">
-          <div className="flex items-center justify-center lg:justify-start gap-4">
-            <div className="w-16 h-16 md:w-20 md:h-20 rounded-2xl bg-gradient-to-br from-gray-900 to-gray-800 dark:from-[#FFDE14] dark:to-[#E6C800] flex items-center justify-center shadow-2xl rotate-3 hover:rotate-6 transition-transform">
-              <Sparkles className="w-8 h-8 md:w-10 md:h-10 text-[#FFDE14] dark:text-gray-900" />
+          <div className="flex flex-col items-center lg:items-start gap-3">
+            <div className="flex items-center gap-3">
+              <Image
+                src={isDarkMode ? "/askia/ASKIA_03.png" : "/askia/ASKIA_04.png"}
+                alt="ASKIA Logo"
+                width={60}
+                height={60}
+                className="object-contain"
+              />
+              <Image
+                src="/askia/ASKIA_02.png"
+                alt="ASKIA"
+                width={150}
+                height={45}
+                className="object-contain"
+              />
             </div>
-            <div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 dark:text-white">
-                ASKIA
-              </h1>
-              <p className="text-sm md:text-base text-gray-700 dark:text-gray-300 font-medium">
-                Inteligência Ativa
-              </p>
-            </div>
+            <p className="text-sm md:text-base text-gray-700 dark:text-gray-300 font-medium">
+              Inteligência Ativa
+            </p>
           </div>
 
           <div className="space-y-4 max-w-xl">
             <p className="text-base md:text-lg text-gray-800 dark:text-gray-200 leading-relaxed">
-              <span className="font-bold">ASKIA</span> é o nome que traduz a essência da inteligência ativa.
+              É o nome que traduz a essência da inteligência ativa.
             </p>
             <p className="text-base md:text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
               É o agente que responde, orienta e esclarece, sempre pronto, sempre acessível.
@@ -146,8 +155,14 @@ export default function LoginPage() {
           <div className="bg-white/95 dark:bg-gray-800/95 backdrop-blur-xl rounded-3xl shadow-2xl p-8 md:p-12 border border-gray-200 dark:border-gray-700">
             <div className="space-y-8">
               <div className="text-center space-y-3">
-                <div className="w-16 h-16 mx-auto rounded-2xl bg-gradient-to-br from-[#FFDE14] to-[#E6C800] flex items-center justify-center shadow-lg">
-                  <Sparkles className="w-8 h-8 text-gray-900" />
+                <div className="w-20 h-20 mx-auto flex items-center justify-center">
+                  <Image
+                    src={isDarkMode ? "/askia/ASKIA_03.png" : "/askia/ASKIA_04.png"}
+                    alt="ASKIA Logo"
+                    width={80}
+                    height={80}
+                    className="object-contain"
+                  />
                 </div>
                 <h2 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
                   Bem-vindo de volta!

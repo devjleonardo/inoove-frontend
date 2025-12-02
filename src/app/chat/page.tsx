@@ -5,6 +5,7 @@ import { Plus, Mic, MoreHorizontal, MessageSquare, Menu, X, Sparkles, Clock, Sun
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { chatService, Conversation, MessageDTO } from '@/services/chatService';
+import Image from 'next/image';
 
 interface Message {
   id: string;
@@ -92,7 +93,7 @@ export default function ChatPage() {
         id: msg.id,
         role: msg.role,
         content: msg.content,
-        timestamp: new Date(msg.timestamp),
+        timestamp: new Date(msg.createdAt),
       }));
       setMessages(formattedMessages);
     } catch (error: any) {
@@ -201,13 +202,22 @@ export default function ChatPage() {
         <div className="p-4 lg:p-6 border-b border-[#E6C800]/20 dark:border-gray-800">
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-gray-900 to-gray-800 dark:from-[#FFDE14] dark:to-[#E6C800] flex items-center justify-center shadow-lg">
-                <Sparkles className="w-5 h-5 text-[#FFDE14] dark:text-black" />
+              <div className="w-10 h-10 flex items-center justify-center">
+                <Image
+                  src={isDarkMode ? "/askia/ASKIA_03.png" : "/askia/ASKIA_04.png"}
+                  alt="ASKIA Logo"
+                  width={40}
+                  height={40}
+                  className="object-contain"
+                />
               </div>
-              <div>
-                <h1 className="text-lg font-bold text-gray-900 dark:text-white">ASKIA</h1>
-                <p className="text-xs text-gray-700 dark:text-gray-300">Sua assistente inteligente</p>
-              </div>
+              <Image
+                src="/askia/ASKIA_02.png"
+                alt="ASKIA"
+                width={100}
+                height={30}
+                className="object-contain"
+              />
             </div>
             <button
               onClick={() => setIsSidebarOpen(false)}
@@ -335,10 +345,20 @@ export default function ChatPage() {
             <Menu className="w-6 h-6 text-gray-900 dark:text-gray-200" />
           </button>
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-br from-gray-900 to-gray-800 dark:from-[#FFDE14] dark:to-[#E6C800] flex items-center justify-center">
-              <Sparkles className="w-4 h-4 text-[#FFDE14] dark:text-gray-900" />
-            </div>
-            <h1 className="text-lg font-bold text-gray-900 dark:text-white">ASKIA</h1>
+            <Image
+              src={isDarkMode ? "/askia/ASKIA_03.png" : "/askia/ASKIA_04.png"}
+              alt="ASKIA Logo"
+              width={32}
+              height={32}
+              className="object-contain"
+            />
+            <Image
+              src="/askia/ASKIA_02.png"
+              alt="ASKIA"
+              width={80}
+              height={24}
+              className="object-contain"
+            />
           </div>
         </header>
 
@@ -346,13 +366,23 @@ export default function ChatPage() {
           {messages.length === 0 ? (
             <div className="h-full flex items-center justify-center p-4">
               <div className="text-center max-w-2xl mx-auto space-y-6">
-                <div className="w-20 h-20 mx-auto rounded-full bg-gradient-to-br from-gray-900 to-gray-800 dark:from-[#FFDE14] dark:to-[#E6C800] flex items-center justify-center shadow-2xl">
-                  <Sparkles className="w-10 h-10 text-[#FFDE14] dark:text-gray-900" />
+                <div className="w-32 h-32 mx-auto flex items-center justify-center">
+                  <Image
+                    src={isDarkMode ? "/askia/ASKIA_03.png" : "/askia/ASKIA_04.png"}
+                    alt="ASKIA Logo"
+                    width={128}
+                    height={128}
+                    className="object-contain"
+                  />
                 </div>
                 <div>
-                  <h2 className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
-                    Olá! Sou a ASKIA
-                  </h2>
+                  <Image
+                    src="/askia/ASKIA_02.png"
+                    alt="ASKIA"
+                    width={200}
+                    height={60}
+                    className="object-contain mx-auto mb-4"
+                  />
                   <p className="text-lg md:text-xl text-gray-800 dark:text-gray-300">
                     O que podemos fazer hoje?
                   </p>
@@ -393,14 +423,26 @@ export default function ChatPage() {
                       <div
                         className={`w-10 h-10 rounded-xl flex items-center justify-center shadow-lg ${
                           message.role === 'user'
-                            ? 'bg-gradient-to-br from-gray-800 to-gray-900 dark:from-[#FFDE14] dark:to-[#E6C800]'
-                            : 'bg-gradient-to-br from-gray-800 to-gray-900 dark:from-[#FFDE14] dark:to-[#E6C800]'
+                            ? 'bg-white dark:bg-gray-800'
+                            : 'bg-white dark:bg-gray-800'
                         }`}
                       >
                         {message.role === 'assistant' ? (
-                          <Sparkles className="w-5 h-5 text-[#FFDE14] dark:text-black" />
+                          <Image
+                            src={isDarkMode ? "/askia/ASKIA_03.png" : "/askia/ASKIA_04.png"}
+                            alt="ASKIA"
+                            width={32}
+                            height={32}
+                            className="object-contain"
+                          />
                         ) : (
-                          <span className="text-white dark:text-black font-bold text-sm">U</span>
+                          <Image
+                            src={isDarkMode ? "/askia/ASKIA_04.png" : "/askia/ASKIA_03.png"}
+                            alt="User"
+                            width={24}
+                            height={24}
+                            className="object-contain"
+                          />
                         )}
                       </div>
                       {message.role === 'assistant' && (
@@ -453,8 +495,14 @@ export default function ChatPage() {
                 <div className="flex justify-start animate-in fade-in slide-in-from-bottom-4 duration-500">
                   <div className="flex gap-4 max-w-[90%] md:max-w-[48%]">
                     <div className="relative flex-shrink-0">
-                      <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg bg-gradient-to-br from-gray-800 to-gray-900 dark:from-[#FFDE14] dark:to-[#E6C800] animate-pulse">
-                        <Sparkles className="w-5 h-5 text-[#FFDE14] dark:text-black" />
+                      <div className="w-10 h-10 rounded-xl flex items-center justify-center shadow-lg bg-white dark:bg-gray-800 animate-pulse">
+                        <Image
+                          src={isDarkMode ? "/askia/ASKIA_03.png" : "/askia/ASKIA_04.png"}
+                          alt="ASKIA"
+                          width={32}
+                          height={32}
+                          className="object-contain"
+                        />
                       </div>
                     </div>
                     <div className="flex flex-col min-w-0">
