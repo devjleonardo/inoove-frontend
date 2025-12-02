@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { Plus, Mic, MoreHorizontal, MessageSquare, Menu, X, Sparkles, Clock, Sun, Moon, ArrowRight, LogOut, Settings } from 'lucide-react';
+import { Plus, Mic, MoreHorizontal, MessageSquare, Menu, X, Sparkles, Clock, Sun, Moon, ArrowRight, LogOut, Settings, ChevronDown, User } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { chatService, Conversation, MessageDTO } from '@/services/chatService';
@@ -25,8 +25,10 @@ export default function ChatPage() {
   const [conversations, setConversations] = useState<Conversation[]>([]);
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>();
   const [isLoadingConversations, setIsLoadingConversations] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const dropdownRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('askia-theme');
@@ -58,6 +60,17 @@ export default function ChatPage() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
 
   useEffect(() => {
     if (user?.chatId) {
@@ -179,7 +192,19 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-[#FFDE14] via-[#FFEA5F] to-[#E6C800] dark:from-black dark:via-black dark:to-black overflow-hidden transition-colors duration-300">
+    <div className="flex h-screen bg-gradient-to-br from-[#FFDE14] via-[#FFEA5F] to-[#E6C800] dark:from-black dark:via-black dark:to-black overflow-hidden transition-colors duration-300 relative">
+      <button
+        onClick={toggleTheme}
+        className="fixed top-4 right-4 z-50 p-3 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all hover:scale-110 active:scale-95"
+        aria-label="Alternar tema"
+      >
+        {isDarkMode ? (
+          <Sun className="w-6 h-6 text-yellow-500" />
+        ) : (
+          <Moon className="w-6 h-6 text-gray-900" />
+        )}
+      </button>
+
       {isSidebarOpen && (
         <div
           className="fixed inset-0 bg-black/30 backdrop-blur-sm z-40 lg:hidden"
@@ -284,53 +309,54 @@ export default function ChatPage() {
           )}
         </div>
 
-        <div className="p-4 border-t border-[#E6C800]/20 dark:border-gray-800 space-y-3">
-          <button
-            onClick={toggleTheme}
-            className="w-full flex items-center justify-between p-3 rounded-lg bg-gray-900/90 dark:bg-[#FFDE14]/10 hover:bg-gray-900 dark:hover:bg-[#FFDE14]/20 transition-colors border border-white/20 dark:border-transparent"
-            aria-label="Alternar tema"
-          >
-            <span className="text-sm font-medium text-white dark:text-white">
-              {isDarkMode ? 'Tema Escuro' : 'Tema Claro'}
-            </span>
-            <div className="relative w-12 h-6 bg-white dark:bg-[#FFDE14] rounded-full transition-colors">
-              <div className={`absolute top-1 ${isDarkMode ? 'right-1' : 'left-1'} w-4 h-4 bg-gray-900 dark:bg-white rounded-full transition-all duration-300 flex items-center justify-center`}>
-                {isDarkMode ? (
-                  <Moon className="w-3 h-3 text-white dark:text-gray-900" />
-                ) : (
-                  <Sun className="w-3 h-3 text-white" />
-                )}
+        <div className="p-4 border-t border-[#E6C800]/20 dark:border-gray-800" ref={dropdownRef}>
+          <div className="relative">
+            <button
+              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              className="w-full flex items-center gap-3 p-3 rounded-lg bg-gray-900/90 dark:bg-[#FFDE14]/10 hover:bg-gray-900 dark:hover:bg-[#FFDE14]/20 transition-colors border border-white/20 dark:border-transparent"
+            >
+              <div className="w-10 h-10 rounded-full bg-white dark:bg-gray-700 flex items-center justify-center">
+                <User className="w-6 h-6 text-gray-900 dark:text-white" />
               </div>
-            </div>
-          </button>
+              <div className="flex-1 text-left">
+                <p className="text-sm font-medium text-white dark:text-white truncate">
+                  {user?.name || 'Usuário'}
+                </p>
+                <p className="text-xs text-gray-300 dark:text-gray-400 truncate">
+                  {user?.email || ''}
+                </p>
+              </div>
+              <ChevronDown className={`w-5 h-5 text-white dark:text-white transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+            </button>
 
-          <button
-            onClick={handleSettings}
-            className="w-full flex items-center justify-between p-3 rounded-lg bg-gray-900/90 dark:bg-[#FFDE14]/10 hover:bg-gray-900 dark:hover:bg-[#FFDE14]/20 transition-colors border border-white/20 dark:border-transparent"
-            aria-label="Configurações"
-          >
-            <span className="text-sm font-medium text-white dark:text-white">
-              Configurações
-            </span>
-            <Settings className="w-5 h-5 text-white dark:text-white" />
-          </button>
-
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center justify-between p-3 rounded-lg bg-red-600/90 dark:bg-red-600/90 hover:bg-red-700 dark:hover:bg-red-700 transition-colors border border-red-500/50 dark:border-red-500/50"
-            aria-label="Sair"
-          >
-            <span className="text-sm font-medium text-white">
-              Sair
-            </span>
-            <LogOut className="w-5 h-5 text-white" />
-          </button>
-
-          <div className="bg-gray-900/90 dark:bg-[#FFDE14]/10 rounded-lg p-3 border border-white/20 dark:border-[#FFDE14]/20">
-            <p className="text-xs font-medium text-white dark:text-white mb-1">💡 Dica do dia</p>
-            <p className="text-xs text-gray-300 dark:text-gray-300">
-              Use comandos específicos para obter respostas mais precisas!
-            </p>
+            {isDropdownOpen && (
+              <div className="absolute bottom-full left-0 right-0 mb-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+                <button
+                  onClick={() => {
+                    handleSettings();
+                    setIsDropdownOpen(false);
+                  }}
+                  className="w-full flex items-center gap-3 p-3 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors text-left"
+                >
+                  <Settings className="w-5 h-5 text-gray-700 dark:text-gray-300" />
+                  <span className="text-sm font-medium text-gray-900 dark:text-white">
+                    Configurações
+                  </span>
+                </button>
+                <button
+                  onClick={() => {
+                    handleLogout();
+                    setIsDropdownOpen(false);
+                  }}
+                  className="w-full flex items-center gap-3 p-3 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-left border-t border-gray-200 dark:border-gray-700"
+                >
+                  <LogOut className="w-5 h-5 text-red-600 dark:text-red-400" />
+                  <span className="text-sm font-medium text-red-600 dark:text-red-400">
+                    Sair
+                  </span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </aside>
