@@ -61,7 +61,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-[#FFDE14] via-[#FFEA5F] to-[#E6C800] dark:from-black dark:via-black dark:to-black transition-colors duration-300 flex items-center justify-center p-4 relative">
+    <div className="min-h-screen bg-gradient-to-br from-[#FFDE14] via-[#FFDE14] to-[#FFDE14] dark:from-black dark:via-black dark:to-black transition-colors duration-300 flex items-center justify-center p-4 relative">
       <button
         onClick={toggleTheme}
         className="fixed top-4 right-4 z-50 p-3 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all hover:scale-110 active:scale-95"
@@ -98,20 +98,14 @@ export default function LoginPage() {
                 className="object-contain"
               />
             </div>
-            <p className="text-sm md:text-base text-gray-700 dark:text-gray-300 font-medium">
-              Inteligência Ativa
-            </p>
           </div>
 
           <div className="space-y-4 max-w-xl">
-            <p className="text-base md:text-lg text-gray-800 dark:text-gray-200 leading-relaxed">
-              É o nome que traduz a essência da inteligência ativa.
+            <p className="text-base md:text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+              É a IA que responde, orienta e esclarece, sempre pronta, sempre acessível.
             </p>
             <p className="text-base md:text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-              É o agente que responde, orienta e esclarece, sempre pronto, sempre acessível.
-            </p>
-            <p className="text-base md:text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
-              Simples, direto e moderno, reforça o ato de perguntar como ponto de partida para mais autonomia, clareza e agilidade dentro do Irrah Tech.
+              Simples, direto e moderna, reforça o ato de perguntar como ponto de partida para mais autonomia, clareza e agilidade dentro da Irrah Tech.
             </p>
           </div>
 
@@ -123,7 +117,7 @@ export default function LoginPage() {
               <h3 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 dark:text-white leading-tight">
                 Descubra.
               </h3>
-              <h3 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-blue-600 dark:text-white leading-tight">
+              <h3 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-[#FFF] dark:text-[#FFDE14] leading-tight">
                 Resolva.
               </h3>
             </div>
@@ -134,7 +128,7 @@ export default function LoginPage() {
               <div className="w-10 h-10 rounded-lg bg-gray-900/10 dark:bg-white/10 flex items-center justify-center">
                 <Zap className="w-5 h-5" />
               </div>
-              <span className="text-sm font-medium">Rápido</span>
+              <span className="text-sm font-medium">Rápida</span>
             </div>
             <div className="flex items-center gap-3 text-gray-800 dark:text-gray-200">
               <div className="w-10 h-10 rounded-lg bg-gray-900/10 dark:bg-white/10 flex items-center justify-center">
