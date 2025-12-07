@@ -83,12 +83,17 @@ body {
     background-size: 200% 200%;
   }
 
+  .animate-gradient-x {
+    animation: gradient-x 3s ease infinite;
+    background-size: 200% 200%;
+  }
+
   /* Efeito de glow suave */
   .glow-effect {
     filter: drop-shadow(0 0 8px rgba(255, 222, 20, 0.3));
   }
 
-  /* Efeito de vidro */
+  /* Efeito de vidro avançado */
   .glass-effect {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
@@ -100,5 +105,179 @@ body {
   .smooth-scroll {
     scroll-behavior: smooth;
     -webkit-overflow-scrolling: touch;
+  }
+
+  /* Efeito holográfico */
+  .holographic {
+    background: linear-gradient(
+      135deg,
+      rgba(59, 130, 246, 0.1) 0%,
+      rgba(147, 51, 234, 0.1) 25%,
+      rgba(236, 72, 153, 0.1) 50%,
+      rgba(147, 51, 234, 0.1) 75%,
+      rgba(59, 130, 246, 0.1) 100%
+    );
+    background-size: 400% 400%;
+    animation: gradient-xy 4s ease infinite;
+  }
+
+  /* Efeito de partículas de energia */
+  .energy-particles {
+    position: relative;
+  }
+
+  .energy-particles::before,
+  .energy-particles::after {
+    content: '';
+    position: absolute;
+    width: 2px;
+    height: 2px;
+    background: currentColor;
+    border-radius: 50%;
+    opacity: 0.6;
+    animation: float 6s ease-in-out infinite;
+  }
+
+  .energy-particles::before {
+    top: 20%;
+    left: 30%;
+    animation-delay: 0s;
+  }
+
+  .energy-particles::after {
+    top: 60%;
+    right: 40%;
+    animation-delay: 2s;
+  }
+
+  /* Efeito de scan line */
+  .scan-line {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scan-line::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(59, 130, 246, 0.8),
+      transparent
+    );
+    animation: scan 3s ease-in-out infinite;
+  }
+
+  @keyframes scan {
+    0% {
+      left: -100%;
+    }
+    100% {
+      left: 100%;
+    }
+  }
+
+  /* Efeito de matriz digital */
+  .digital-rain {
+    position: relative;
+  }
+
+  .digital-rain::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: linear-gradient(
+      transparent 0%,
+      rgba(59, 130, 246, 0.05) 50%,
+      transparent 100%
+    );
+    background-size: 100% 200%;
+    animation: digital-rain 2s linear infinite;
+  }
+
+  @keyframes digital-rain {
+    0% {
+      background-position: 0% 0%;
+    }
+    100% {
+      background-position: 0% 200%;
+    }
+  }
+
+  /* Efeito neon pulse */
+  .neon-pulse {
+    animation: neon-pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes neon-pulse {
+    0%, 100% {
+      text-shadow:
+        0 0 5px rgba(59, 130, 246, 0.5),
+        0 0 10px rgba(59, 130, 246, 0.3),
+        0 0 15px rgba(59, 130, 246, 0.2);
+    }
+    50% {
+      text-shadow:
+        0 0 10px rgba(59, 130, 246, 0.8),
+        0 0 20px rgba(59, 130, 246, 0.5),
+        0 0 30px rgba(59, 130, 246, 0.3);
+    }
+  }
+
+  /* Efeito de ondas expansivas */
+  .ripple-effect {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .ripple-effect::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    border-radius: 50%;
+    background: rgba(59, 130, 246, 0.3);
+    transform: translate(-50%, -50%);
+    animation: ripple 3s ease-out infinite;
+  }
+
+  @keyframes ripple {
+    0% {
+      width: 0;
+      height: 0;
+      opacity: 1;
+    }
+    100% {
+      width: 300px;
+      height: 300px;
+      opacity: 0;
+    }
+  }
+
+  /* Efeito de grid tecnológico */
+  .tech-grid {
+    background-image:
+      linear-gradient(rgba(59, 130, 246, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(59, 130, 246, 0.05) 1px, transparent 1px);
+    background-size: 30px 30px;
+    animation: tech-grid-move 20s linear infinite;
+  }
+
+  @keyframes tech-grid-move {
+    0% {
+      background-position: 0 0;
+    }
+    100% {
+      background-position: 30px 30px;
+    }
   }
 }

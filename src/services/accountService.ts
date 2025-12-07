@@ -12,6 +12,7 @@ export interface AccountResponseDTO {
   email: string;
   createdAt: string;
   chatId: string;
+  role?: 'user' | 'admin';
 }
 
 export const accountService = {

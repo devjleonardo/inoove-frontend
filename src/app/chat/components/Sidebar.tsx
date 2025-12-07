@@ -9,6 +9,7 @@ interface SidebarProps {
   conversations: Conversation[];
   selectedConversation: Conversation | null | undefined;
   isLoadingConversations: boolean;
+  isLoading: boolean;
   isDropdownOpen: boolean;
   userName: string;
   userEmail: string;
@@ -25,6 +26,7 @@ export default function Sidebar({
   conversations,
   selectedConversation,
   isLoadingConversations,
+  isLoading,
   isDropdownOpen,
   userName,
   userEmail,
@@ -61,7 +63,8 @@ export default function Sidebar({
 
         <button
           onClick={onNewChat}
-          className="w-full flex items-center justify-center gap-2 p-3 rounded-xl bg-gray-900 dark:bg-[#FFDE14] text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-[#E6C800] transition-all shadow-lg hover:shadow-xl font-medium"
+          disabled={isLoading}
+          className="w-full flex items-center justify-center gap-2 p-3 rounded-xl bg-gray-900 dark:bg-[#FFDE14] text-white dark:text-gray-900 hover:bg-gray-800 dark:hover:bg-[#E6C800] transition-all shadow-lg hover:shadow-xl font-medium disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-gray-900 dark:disabled:hover:bg-[#FFDE14]"
         >
           <Plus className="w-5 h-5" />
           <span>Nova Conversa</span>

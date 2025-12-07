@@ -1,55 +1,89 @@
 'use client';
 
 import Image from 'next/image';
+import { Sparkles, Zap, Search, Lightbulb, FileText, Code, Cpu, CircuitBoard, Binary, Braces, Database, Network, Terminal, Workflow } from 'lucide-react';
+import { useState } from 'react';
 
 interface EmptyChatProps {
   isDarkMode: boolean;
 }
 
 export default function EmptyChat({ isDarkMode }: EmptyChatProps) {
+  const [hoveredCard, setHoveredCard] = useState<number | null>(null);
+
+  const suggestions = [
+    {
+      icon: FileText,
+      text: 'Escrever um texto criativo',
+      gradient: 'from-blue-500 to-cyan-500',
+      darkGradient: 'dark:from-[#FFDE14] dark:to-[#FFEA5F]'
+    },
+    {
+      icon: Lightbulb,
+      text: 'Gerar ideias inovadoras',
+      gradient: 'from-purple-500 to-pink-500',
+      darkGradient: 'dark:from-[#FFEA5F] dark:to-[#FFD700]'
+    },
+    {
+      icon: Search,
+      text: 'Pesquisar informações',
+      gradient: 'from-green-500 to-emerald-500',
+      darkGradient: 'dark:from-[#FFD700] dark:to-[#E6C800]'
+    },
+    {
+      icon: Code,
+      text: 'Ajudar com programação',
+      gradient: 'from-orange-500 to-red-500',
+      darkGradient: 'dark:from-[#FFDE14] dark:to-[#FFEA5F]'
+    },
+  ];
+
   return (
-    <div className="h-full flex items-center justify-center p-4">
-      <div className="text-center max-w-2xl mx-auto space-y-6 animate-in fade-in duration-700">
-        <div className="w-32 h-32 mx-auto flex items-center justify-center">
-          <div className="animate-float">
+    <div className="h-full flex items-center justify-center p-4 relative overflow-hidden">
+      <div className="text-center max-w-4xl mx-auto space-y-10 animate-in fade-in duration-1000 relative z-10">
+        {/* Logo completo */}
+        <div className="flex flex-col items-center gap-2">
+          <div className="relative w-32 h-32 flex items-center justify-center">
             <Image
               src={isDarkMode ? "/askia/ASKIA_03.png" : "/askia/ASKIA_04.png"}
               alt="ASKIA Logo"
-              width={128}
-              height={128}
+              width={100}
+              height={100}
+              className="object-contain"
+            />
+          </div>
+          <div className="relative">
+            <Image
+              src="/askia/ASKIA_02.png"
+              alt="ASKIA"
+              width={240}
+              height={72}
               className="object-contain"
             />
           </div>
         </div>
-        <div className="animate-in slide-in-from-bottom-4 duration-1000">
-          <Image
-            src="/askia/ASKIA_02.png"
-            alt="ASKIA"
-            width={200}
-            height={60}
-            className="object-contain mx-auto mb-4"
-          />
-          <p className="text-lg md:text-xl text-gray-800 dark:text-gray-300">
-            O que podemos fazer hoje?
-          </p>
+
+        {/* Texto de boas-vindas */}
+        <div className="space-y-4 animate-in slide-in-from-bottom-4 duration-1000" style={{ animationDelay: '200ms' }}>
+          <div className="relative">
+            <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-[#FFDE14] dark:via-[#FFEA5F] dark:to-[#FFDE14] bg-clip-text text-transparent animate-gradient-x" style={{ backgroundSize: '200% 200%' }}>
+              Como posso ajudar você hoje?
+            </h2>
+            <p className="text-base md:text-lg text-gray-600 dark:text-gray-400 mt-2 font-medium">
+              Explore as possibilidades infinitas da Aksia Irrah
+            </p>
+          </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-8">
-          {[
-            { icon: '✍️', text: 'Escrever um texto' },
-            { icon: '💡', text: 'Gerar ideias criativas' },
-            { icon: '📊', text: 'Analisar dados' },
-            { icon: '🔍', text: 'Pesquisar informações' },
-          ].map((item, index) => (
-            <button
-              key={index}
-              className="p-4 rounded-xl bg-gray-900/90 dark:bg-[#FFDE14]/10 border-2 border-gray-900 dark:border-[#FFDE14]/20 hover:bg-gray-900 dark:hover:bg-[#FFDE14]/20 hover:border-gray-700 dark:hover:border-[#FFDE14] hover:shadow-lg transition-all group"
-            >
-              <div className="text-3xl mb-2">{item.icon}</div>
-              <p className="text-sm font-medium text-white dark:text-gray-200 group-hover:text-gray-200 dark:group-hover:text-white">
-                {item.text}
-              </p>
-            </button>
-          ))}
+
+        {/* Cards de sugestões com efeitos futuristas */}
+
+        {/* Texto de incentivo */}
+        <div className="animate-in fade-in duration-1000" style={{ animationDelay: '600ms' }}>
+          <p className="text-sm text-gray-500 dark:text-gray-500 flex items-center justify-center gap-2 font-medium">
+            <Sparkles className="w-4 h-4 animate-pulse" />
+            Digite sua pergunta no campo abaixo para começar
+            <Zap className="w-4 h-4 animate-pulse" style={{ animationDelay: '0.5s' }} />
+          </p>
         </div>
       </div>
     </div>

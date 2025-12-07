@@ -12,6 +12,7 @@ export interface LoginResponseDTO {
   email: string;
   createdAt: string;
   chatId: string;
+  role?: 'user' | 'admin';
 }
 
 export const authService = {

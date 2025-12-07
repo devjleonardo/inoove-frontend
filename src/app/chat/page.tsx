@@ -1,10 +1,11 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { X, Sun, Moon } from 'lucide-react';
+import { X, Sun, Moon, Shield } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { chatService, Conversation, MessageDTO } from '@/services/chatService';
+import { feedbackService } from '@/services/feedbackService';
 import Sidebar from './components/Sidebar';
 import ChatHeader from './components/ChatHeader';
 import EmptyChat from './components/EmptyChat';
@@ -208,19 +209,72 @@ export default function ChatPage() {
     setIsSettingsOpen(false);
   };
 
+  const handleMessageFeedback = async (
+    messageId: string,
+    type: 'positive' | 'negative' | 'report',
+    comment?: string
+  ) => {
+    if (!user || !selectedConversation) return;
+
+    try {
+      let parsedComment;
+      if (comment) {
+        try {
+          parsedComment = JSON.parse(comment);
+        } catch {
+          parsedComment = { comment };
+        }
+      }
+
+      await feedbackService.submitMessageFeedback({
+        messageId,
+        conversationId: selectedConversation.id,
+        type,
+        issues: parsedComment?.issues,
+        comment: parsedComment?.comment || comment,
+        userId: user.id
+      });
+
+      console.log(`Feedback ${type} enviado para mensagem ${messageId}`);
+    } catch (error: any) {
+      console.error('Erro ao enviar feedback:', error);
+    }
+  };
+
   return (
-    <div className="flex h-screen bg-[#FFDE14] dark:bg-black overflow-hidden transition-colors duration-300 relative">
-      <button
-        onClick={toggleTheme}
-        className="fixed top-4 right-4 z-50 p-3 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-lg hover:shadow-xl transition-all hover:scale-110 active:scale-95"
-        aria-label="Alternar tema"
-      >
-        {isDarkMode ? (
-          <Sun className="w-6 h-6 text-yellow-500" />
-        ) : (
-          <Moon className="w-6 h-6 text-gray-900" />
-        )}
-      </button>
+    <div className="flex h-screen bg-gradient-to-br from-[#FFDE14] via-[#FFEA5F] to-[#FFD700] dark:from-black dark:via-black dark:to-black overflow-hidden transition-all duration-700 relative">
+
+      <div className="fixed top-4 right-4 z-50 flex gap-3">
+        <button
+          onClick={() => {
+            // Adicionar role admin temporariamente
+            const currentUser = user;
+            if (currentUser) {
+              const updatedUser = { ...currentUser, role: 'admin' as const };
+              // Atualizar tanto o localStorage quanto o contexto
+              localStorage.setItem('askia-user', JSON.stringify(updatedUser));
+              // Forçar reload da página para recarregar o contexto
+              window.location.href = '/admin';
+            }
+          }}
+          className="p-3 rounded-full bg-purple-500/90 dark:bg-purple-600/90 backdrop-blur-sm shadow-lg hover:shadow-2xl transition-all hover:scale-110 active:scale-95 border-2 border-transparent hover:border-purple-700"
+          aria-label="Acessar Admin"
+          title="Acessar Dashboard Admin"
+        >
+          <Shield className="w-6 h-6 text-white" />
+        </button>
+        <button
+          onClick={toggleTheme}
+          className="p-3 rounded-full bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm shadow-lg hover:shadow-2xl transition-all hover:scale-110 active:scale-95 border-2 border-transparent hover:border-blue-500 dark:hover:border-[#FFDE14]"
+          aria-label="Alternar tema"
+        >
+          {isDarkMode ? (
+            <Sun className="w-6 h-6 text-yellow-500 animate-spin-slow" />
+          ) : (
+            <Moon className="w-6 h-6 text-gray-900 animate-pulse" />
+          )}
+        </button>
+      </div>
 
       {isSidebarOpen && (
         <div
@@ -242,6 +296,7 @@ export default function ChatPage() {
           conversations={conversations}
           selectedConversation={selectedConversation}
           isLoadingConversations={isLoadingConversations}
+          isLoading={isLoading}
           isDropdownOpen={isDropdownOpen}
           userName={user?.name || 'Usuário'}
           userEmail={user?.email || ''}
@@ -266,6 +321,7 @@ export default function ChatPage() {
               isLoading={isLoading}
               isDarkMode={isDarkMode}
               messagesEndRef={messagesEndRef}
+              onMessageFeedback={handleMessageFeedback}
             />
           )}
         </div>
