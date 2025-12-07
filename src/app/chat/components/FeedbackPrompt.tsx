@@ -28,7 +28,6 @@ export default function FeedbackPrompt({
   const [countdown, setCountdown] = useState(5);
   const [canClose, setCanClose] = useState(canDismiss);
 
-  // Countdown para forçar atenção
   useEffect(() => {
     if (!canDismiss && countdown > 0) {
       const timer = setTimeout(() => {
@@ -108,7 +107,6 @@ export default function FeedbackPrompt({
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center animate-in fade-in duration-200">
       <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-md mx-4 shadow-2xl border-4 border-[#FFDE14] dark:border-[#FFDE14] animate-in zoom-in-95 duration-300">
-        {/* Header */}
         <div className="flex items-start justify-between mb-4">
           <div className="flex-1">
             <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-1">
@@ -135,7 +133,6 @@ export default function FeedbackPrompt({
           )}
         </div>
 
-        {/* Step: Helpful */}
         {step === 'helpful' && (
           <div className="space-y-4 animate-in slide-in-from-bottom-4 duration-300">
             <p className="text-center text-lg font-semibold text-gray-900 dark:text-white mb-6">
@@ -162,7 +159,6 @@ export default function FeedbackPrompt({
           </div>
         )}
 
-        {/* Step: Rating */}
         {step === 'rating' && (
           <div className="space-y-6 animate-in slide-in-from-bottom-4 duration-300">
             <div>
@@ -222,7 +218,6 @@ export default function FeedbackPrompt({
           </div>
         )}
 
-        {/* Step: Comment (for negative feedback) */}
         {step === 'comment' && (
           <div className="space-y-4 animate-in slide-in-from-bottom-4 duration-300">
             <div className="flex items-center gap-3 p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-800">
@@ -254,7 +249,6 @@ export default function FeedbackPrompt({
           </div>
         )}
 
-        {/* Progress indicator */}
         <div className="mt-6 pt-4 border-t border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-center gap-2">
             <div className={`w-2 h-2 rounded-full ${step === 'helpful' ? 'bg-[#FFDE14]' : 'bg-gray-300 dark:bg-gray-600'}`} />

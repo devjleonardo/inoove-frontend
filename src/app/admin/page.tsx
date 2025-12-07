@@ -41,7 +41,6 @@ export default function AdminPage() {
       return;
     }
 
-    // Verificar se o usuário é admin
     if (user?.role !== 'admin') {
       router.push('/chat');
       return;
@@ -83,16 +82,13 @@ export default function AdminPage() {
 
   return (
     <div className="flex h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-black overflow-hidden">
-      {/* Sidebar */}
       <AdminSidebar
         isDarkMode={isDarkMode}
         activeSection={activeSection}
         onSectionChange={setActiveSection}
       />
 
-      {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Header */}
         <header className="bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 backdrop-blur-sm bg-white/95 dark:bg-gray-800/95 z-10">
           <div className="px-6 py-4">
             <div className="flex items-center justify-between">
@@ -138,7 +134,6 @@ export default function AdminPage() {
           </div>
         </header>
 
-        {/* Content Area */}
         <main className="flex-1 overflow-y-auto p-6">
           <div className="max-w-7xl mx-auto">
             {activeSection === 'overview' && <OverviewSection isDarkMode={isDarkMode} />}

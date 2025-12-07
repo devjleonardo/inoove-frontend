@@ -38,7 +38,7 @@ export default function Sidebar({
   dropdownRef,
 }: SidebarProps) {
   return (
-    <aside className="w-full lg:w-80 h-full bg-gradient-to-b from-[#FFDE14] to-[#FFDE14] dark:from-black dark:to-black border-r border-gray-900/20 dark:border-gray-800 flex flex-col transition-colors duration-300">
+    <aside className="w-full lg:w-80 h-full bg-[#E6C800] dark:bg-[#0d0d0d] border-r border-gray-900/20 dark:border-gray-800 flex flex-col transition-colors duration-300">
       <div className="p-4 lg:p-6 border-b border-gray-900/20 dark:border-gray-800">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-3">

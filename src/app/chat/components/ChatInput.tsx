@@ -15,24 +15,19 @@ export default function ChatInput({ input, isLoading, onInputChange, onSubmit, i
   const [isFocused, setIsFocused] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
-  // Auto-resize textarea
   useEffect(() => {
     const textarea = textareaRef.current;
     if (textarea) {
       textarea.style.height = 'auto';
-      const newHeight = Math.min(textarea.scrollHeight, 200); // Max 200px
+      const newHeight = Math.min(textarea.scrollHeight, 200);
       textarea.style.height = `${newHeight}px`;
     }
   }, [input]);
 
   return (
-    <div className="p-6 relative">
-      <div className="max-w-3xl mx-auto">
+    <div className="relative mx-52 bg-[#FFDE14] dark:bg-[#121212] transition-colors duration-700">
         <form onSubmit={onSubmit} className="relative">
-          {/* Container principal limpo */}
-          <div className="relative flex items-end gap-3 px-6 py-3 rounded-3xl bg-[#222222] dark:bg-[#1a1a1a] border-2 border-gray-800 dark:border-[#FFDE14]/40 shadow-lg transition-all duration-200">
-
-            {/* Input limpo */}
+          <div className="relative flex items-end gap-3 px-6 py-3 rounded-3xl bg-[#1e1e1e] dark:bg-[#1e1e1e] border-2 border-gray-700 dark:border-[#FFDE14]/40 transition-all duration-200">
             <div className="flex-1 relative">
               <textarea
                 ref={textareaRef}
@@ -55,7 +50,6 @@ export default function ChatInput({ input, isLoading, onInputChange, onSubmit, i
               />
             </div>
 
-            {/* Botão de envio */}
             <button
               type="submit"
               disabled={!input.trim() || isLoading}
@@ -67,14 +61,12 @@ export default function ChatInput({ input, isLoading, onInputChange, onSubmit, i
           </div>
         </form>
 
-        {/* Rodapé com aviso */}
-        <div className="mt-3 flex items-center justify-center">
-          <div className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-700 bg-white/60 dark:bg-black/50 backdrop-blur-sm">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
-            <p className="text-xs text-gray-600 dark:text-gray-400">
-              A ASKIA pode cometer erros. Verifique informações importantes.
-            </p>
-          </div>
+      <div className="mt-3 mb-2 flex items-center justify-center">
+        <div className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-400 dark:border-gray-700 bg-white/80 dark:bg-black/50 backdrop-blur-sm">
+          <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+          <p className="text-xs text-gray-900 dark:text-gray-400 font-medium">
+            A ASKIA pode cometer erros. Verifique informações importantes.
+          </p>
         </div>
       </div>
     </div>

@@ -18,6 +18,7 @@ interface Message {
   role: 'user' | 'assistant';
   content: string;
   timestamp: Date;
+  status?: 'sending' | 'sent' | 'error';
 }
 
 export default function ChatPage() {
@@ -108,7 +109,6 @@ export default function ChatPage() {
   };
 
   const loadMessages = async (conversationId: string) => {
-    setIsLoading(true);
     try {
       const data = await chatService.getMessages(user!.chatId, conversationId);
       const formattedMessages: Message[] = data.map((msg: any) => ({
@@ -120,8 +120,6 @@ export default function ChatPage() {
       setMessages(formattedMessages);
     } catch (error: any) {
       console.error('Erro ao carregar mensagens:', error);
-    } finally {
-      setIsLoading(false);
     }
   };
 
@@ -131,11 +129,13 @@ export default function ChatPage() {
 
     let conversationToUse = selectedConversation || null;
 
+    const messageId = Date.now().toString();
     const userMessage: Message = {
-      id: Date.now().toString(),
+      id: messageId,
       role: 'user',
       content: input,
       timestamp: new Date(),
+      status: 'sending',
     };
 
     setMessages((prev) => [...prev, userMessage]);
@@ -144,6 +144,10 @@ export default function ChatPage() {
     setIsLoading(true);
 
     try {
+      setMessages((prev) => prev.map(msg =>
+        msg.id === messageId ? { ...msg, status: 'sent' as const } : msg
+      ));
+
       const response = await chatService.ask(user.chatId, conversationToUse?.id, {
         text: userInput,
         userId: user.id,
@@ -159,14 +163,63 @@ export default function ChatPage() {
         }
       }
 
-      const aiMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        role: 'assistant',
-        content: response.answer,
+      const answers = response.answers || [];
+
+      if (answers.length === 0) {
+        const emptyMessage: Message = {
+          id: (Date.now() + 1).toString(),
+          role: 'assistant',
+          content: 'Desculpe, não consegui gerar uma resposta.',
+          timestamp: new Date(),
+        };
+        setMessages((prev) => [...prev, emptyMessage]);
+        return;
+      }
+
+      const messageIds = answers.map((_, idx) => (Date.now() + idx + 1).toString());
+
+      const initialMessages: Message[] = messageIds.map((id, idx) => ({
+        id,
+        role: 'assistant' as const,
+        content: '',
         timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, aiMessage]);
+      }));
+
+      setMessages((prev) => [...prev, ...initialMessages]);
+
+      let currentAnswerIndex = 0;
+      let currentCharIndex = 0;
+
+      const streamInterval = setInterval(() => {
+        if (currentAnswerIndex >= answers.length) {
+          clearInterval(streamInterval);
+          return;
+        }
+
+        const currentAnswer = answers[currentAnswerIndex];
+        const currentMessageId = messageIds[currentAnswerIndex];
+
+        if (currentCharIndex < currentAnswer.length) {
+          const charsToAdd = Math.min(8, currentAnswer.length - currentCharIndex);
+          currentCharIndex += charsToAdd;
+
+          const currentContent = currentAnswer.substring(0, currentCharIndex);
+
+          setMessages((prev) => prev.map(msg =>
+            msg.id === currentMessageId
+              ? { ...msg, content: currentContent }
+              : msg
+          ));
+        } else {
+          currentAnswerIndex++;
+          currentCharIndex = 0;
+        }
+      }, 20);
     } catch (error: any) {
+      setMessages((prev) => prev.map(msg =>
+        msg.id === messageId ? { ...msg, status: 'error' as const } : msg
+      ));
+
       const errorMessage: Message = {
         id: (Date.now() + 1).toString(),
         role: 'assistant',
@@ -191,6 +244,7 @@ export default function ChatPage() {
   };
 
   const handleSelectConversation = (conversation: Conversation) => {
+    setMessages([]);
     setSelectedConversation(conversation);
     setIsSidebarOpen(false);
   };
@@ -242,18 +296,15 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="flex h-screen bg-gradient-to-br from-[#FFDE14] via-[#FFEA5F] to-[#FFD700] dark:from-black dark:via-black dark:to-black overflow-hidden transition-all duration-700 relative">
+    <div className="flex h-screen bg-[#FFDE14] dark:bg-[#121212] overflow-hidden transition-all duration-700 relative">
 
       <div className="fixed top-4 right-4 z-50 flex gap-3">
         <button
           onClick={() => {
-            // Adicionar role admin temporariamente
             const currentUser = user;
             if (currentUser) {
               const updatedUser = { ...currentUser, role: 'admin' as const };
-              // Atualizar tanto o localStorage quanto o contexto
               localStorage.setItem('askia-user', JSON.stringify(updatedUser));
-              // Forçar reload da página para recarregar o contexto
               window.location.href = '/admin';
             }
           }}

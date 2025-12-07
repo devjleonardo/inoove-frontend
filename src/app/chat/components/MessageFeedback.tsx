@@ -28,10 +28,8 @@ export default function MessageFeedback({ messageId, onFeedback }: MessageFeedba
     setSelectedFeedback(type);
 
     if (type === 'positive') {
-      // Feedback positivo: enviar direto
       onFeedback(messageId, 'positive');
     } else {
-      // Feedback negativo: abrir modal para detalhar
       setShowDetailModal(true);
     }
   };
@@ -117,7 +115,6 @@ export default function MessageFeedback({ messageId, onFeedback }: MessageFeedba
 
   return (
     <div className="mt-3 flex items-center gap-2 animate-in fade-in slide-in-from-bottom-2 duration-300">
-      {/* Botão Positivo */}
       <button
         onClick={() => handleFeedback('positive')}
         disabled={selectedFeedback !== null}
@@ -132,7 +129,6 @@ export default function MessageFeedback({ messageId, onFeedback }: MessageFeedba
         <span className="hidden sm:inline">Útil</span>
       </button>
 
-      {/* Botão Negativo */}
       <button
         onClick={() => handleFeedback('negative')}
         disabled={selectedFeedback !== null}
@@ -147,10 +143,8 @@ export default function MessageFeedback({ messageId, onFeedback }: MessageFeedba
         <span className="hidden sm:inline">Não útil</span>
       </button>
 
-      {/* Separador */}
       <div className="h-6 w-px bg-gray-300 dark:bg-gray-600 mx-1" />
 
-      {/* Botão Reportar */}
       <button
         onClick={() => onFeedback(messageId, 'report')}
         className="p-2 rounded-lg text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-all hover:scale-105 border border-orange-200 dark:border-orange-800"
@@ -159,7 +153,6 @@ export default function MessageFeedback({ messageId, onFeedback }: MessageFeedba
         <Flag className="w-4 h-4" />
       </button>
 
-      {/* Mensagem de agradecimento */}
       {selectedFeedback === 'positive' && (
         <span className="text-xs text-green-600 dark:text-green-400 font-medium animate-in fade-in slide-in-from-left-2 duration-300 ml-2">
           ✨ Obrigado pelo feedback!

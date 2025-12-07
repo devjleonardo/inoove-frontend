@@ -30,7 +30,6 @@ export interface FeedbackAnalyticsDTO {
 }
 
 export const feedbackService = {
-  // Enviar feedback de mensagem individual
   async submitMessageFeedback(feedback: Omit<MessageFeedbackDTO, 'timestamp'>): Promise<void> {
     try {
       await api.post('v1/feedback/message', {
@@ -43,7 +42,6 @@ export const feedbackService = {
     }
   },
 
-  // Enviar feedback de conversa
   async submitConversationFeedback(feedback: Omit<ConversationFeedbackDTO, 'timestamp'>): Promise<void> {
     try {
       await api.post('v1/feedback/conversation', {
@@ -56,7 +54,6 @@ export const feedbackService = {
     }
   },
 
-  // Buscar analytics de feedback (para o admin)
   async getFeedbackAnalytics(chatId: string, startDate?: Date, endDate?: Date): Promise<FeedbackAnalyticsDTO> {
     try {
       const params = new URLSearchParams();
@@ -73,7 +70,6 @@ export const feedbackService = {
     }
   },
 
-  // Buscar feedbacks negativos (para melhorias)
   async getNegativeFeedbacks(chatId: string, limit: number = 50): Promise<MessageFeedbackDTO[]> {
     try {
       const response = await api.get<MessageFeedbackDTO[]>(
@@ -86,7 +82,6 @@ export const feedbackService = {
     }
   },
 
-  // Buscar feedbacks por conversa
   async getConversationFeedbacks(conversationId: string): Promise<{
     messageFeedbacks: MessageFeedbackDTO[];
     conversationFeedback?: ConversationFeedbackDTO;

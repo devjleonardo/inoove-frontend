@@ -20,7 +20,7 @@ export interface AskRequestDTO {
 }
 
 export interface AskResponseDTO {
-  answer: string;
+  answers: string[];
   conversationId: string;
   source: string;
   retrievedNodeIds: string[];

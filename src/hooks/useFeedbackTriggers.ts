@@ -29,16 +29,14 @@ export function useFeedbackTriggers({
     };
   }>({});
 
-  // Configurações de trigger
   const TRIGGERS = {
-    AFTER_EVERY_N_RESPONSES: 3, // A cada 3 respostas da IA
-    PERIODIC_CHECK: 5, // A cada 5 mensagens totais
-    NEW_CONVERSATION_DELAY: 2, // Após 2 mensagens em nova conversa
-    BEFORE_NEW_CHAT_THRESHOLD: 4, // Se tem 4+ mensagens e tenta criar nova
-    MIN_TIME_BETWEEN_PROMPTS: 60000, // 1 minuto entre prompts (ms)
+    AFTER_EVERY_N_RESPONSES: 3,
+    PERIODIC_CHECK: 5,
+    NEW_CONVERSATION_DELAY: 2,
+    BEFORE_NEW_CHAT_THRESHOLD: 4,
+    MIN_TIME_BETWEEN_PROMPTS: 60000,
   };
 
-  // Verifica se pode mostrar prompt (respeita intervalo mínimo)
   const canShowPrompt = useCallback((convId: string) => {
     if (!convId) return false;
 
@@ -49,13 +47,11 @@ export function useFeedbackTriggers({
     return timeSinceLastFeedback >= TRIGGERS.MIN_TIME_BETWEEN_PROMPTS;
   }, [feedbackHistory, TRIGGERS.MIN_TIME_BETWEEN_PROMPTS]);
 
-  // Verifica se trigger já foi completado nesta conversa
   const isTriggerCompleted = useCallback((convId: string, triggerType: string) => {
     const history = feedbackHistory[convId];
     return history?.completedTriggers.includes(triggerType) || false;
   }, [feedbackHistory]);
 
-  // Trigger 1: Após cada N respostas
   useEffect(() => {
     if (!conversationId || !lastMessageRole || lastMessageRole !== 'assistant') return;
 
@@ -74,7 +70,6 @@ export function useFeedbackTriggers({
     }
   }, [messageCount, lastMessageRole, conversationId, canShowPrompt, isTriggerCompleted, TRIGGERS.AFTER_EVERY_N_RESPONSES]);
 
-  // Trigger 2: Check periódico
   useEffect(() => {
     if (!conversationId) return;
 
@@ -93,7 +88,6 @@ export function useFeedbackTriggers({
     }
   }, [messageCount, conversationId, canShowPrompt, isTriggerCompleted, TRIGGERS.PERIODIC_CHECK]);
 
-  // Trigger 3: Nova conversa (após primeiras mensagens)
   useEffect(() => {
     if (!conversationId || !isNewConversation) return;
 
@@ -110,7 +104,6 @@ export function useFeedbackTriggers({
     }
   }, [messageCount, conversationId, isNewConversation, isTriggerCompleted, TRIGGERS.NEW_CONVERSATION_DELAY]);
 
-  // Marcar trigger como completado
   const completeTrigger = useCallback((convId: string, triggerType: string) => {
     setFeedbackHistory(prev => ({
       ...prev,
@@ -126,19 +119,17 @@ export function useFeedbackTriggers({
     setActiveTrigger(null);
   }, []);
 
-  // Dismissar trigger atual
   const dismissTrigger = useCallback(() => {
     setActiveTrigger(null);
   }, []);
 
-  // Trigger forçado antes de nova conversa
   const triggerBeforeNewChat = useCallback((currentConvId: string) => {
     if (!currentConvId || messageCount < TRIGGERS.BEFORE_NEW_CHAT_THRESHOLD) {
-      return false; // Não precisa de feedback
+      return false;
     }
 
     if (isTriggerCompleted(currentConvId, 'before_new_chat')) {
-      return false; // Já deu feedback
+      return false; 
     }
 
     setActiveTrigger({
@@ -147,10 +138,9 @@ export function useFeedbackTriggers({
       priority: 'high'
     });
 
-    return true; // Bloqueou ação, precisa de feedback
+    return true;
   }, [messageCount, isTriggerCompleted, TRIGGERS.BEFORE_NEW_CHAT_THRESHOLD]);
 
-  // Estatísticas de feedback
   const getStats = useCallback(() => {
     const totalFeedbacks = Object.values(feedbackHistory).reduce(
       (sum, h) => sum + h.count,

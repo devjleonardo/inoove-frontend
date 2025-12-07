@@ -18,7 +18,6 @@ interface KnowledgeHeatmapProps {
 }
 
 export default function KnowledgeHeatmap({ isDarkMode }: KnowledgeHeatmapProps) {
-  // Mock data - será substituído por dados reais da API
   const uneps = ['Irrah Tech', 'Plug Chat', 'Z-API', 'GPT Maker', 'Kigi'];
 
   const heatmapData: HeatmapData[] = [
@@ -139,7 +138,6 @@ export default function KnowledgeHeatmap({ isDarkMode }: KnowledgeHeatmapProps) 
         </p>
       </div>
 
-      {/* Legenda */}
       <div className="mb-6 flex flex-wrap gap-4 p-4 bg-gray-50 dark:bg-gray-900/50 rounded-xl border border-gray-200 dark:border-gray-700">
         <div className="flex items-center gap-2">
           <div className="flex">
@@ -164,7 +162,6 @@ export default function KnowledgeHeatmap({ isDarkMode }: KnowledgeHeatmapProps) 
         </div>
       </div>
 
-      {/* Tabela do Heatmap */}
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
@@ -200,7 +197,6 @@ export default function KnowledgeHeatmap({ isDarkMode }: KnowledgeHeatmapProps) 
                           data.level
                         )}`}
                       >
-                        {/* Flames */}
                         <div className="flex mb-1">
                           {Array.from({ length: getFlameCount(data.level) }).map((_, i) => (
                             <Flame
@@ -216,10 +212,8 @@ export default function KnowledgeHeatmap({ isDarkMode }: KnowledgeHeatmapProps) 
                           ))}
                         </div>
 
-                        {/* Volume */}
                         <div className="text-lg font-bold mb-0.5">{data.volume}</div>
 
-                        {/* Trend */}
                         <div
                           className={`flex items-center justify-center ${
                             data.trend === 'up'
@@ -232,7 +226,6 @@ export default function KnowledgeHeatmap({ isDarkMode }: KnowledgeHeatmapProps) 
                           {getTrendIcon(data.trend)}
                         </div>
 
-                        {/* Tooltip */}
                         <div className="absolute bottom-full mb-2 hidden group-hover:block z-20">
                           <div className="bg-gray-900 dark:bg-white text-white dark:text-gray-900 text-xs rounded-lg py-2 px-3 whitespace-nowrap shadow-xl">
                             <div className="font-bold mb-1">{unep}</div>
@@ -260,7 +253,6 @@ export default function KnowledgeHeatmap({ isDarkMode }: KnowledgeHeatmapProps) 
         </table>
       </div>
 
-      {/* Insights */}
       <div className="mt-6 p-4 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-xl border border-purple-200 dark:border-purple-700">
         <h3 className="text-sm font-bold text-gray-900 dark:text-white mb-2">💡 Insights Automáticos</h3>
         <ul className="space-y-1 text-xs text-gray-700 dark:text-gray-300">
