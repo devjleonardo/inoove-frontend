@@ -25,7 +25,7 @@ export default function FeedbackPrompt({
   const [helpful, setHelpful] = useState<boolean | null>(null);
   const [comment, setComment] = useState('');
   const [hoveredStar, setHoveredStar] = useState(0);
-  const [countdown, setCountdown] = useState(5);
+  const [countdown, setCountdown] = useState(3);
   const [canClose, setCanClose] = useState(canDismiss);
 
   useEffect(() => {
@@ -209,7 +209,7 @@ export default function FeedbackPrompt({
                     onSubmit(rating || 3, true);
                     onDismiss?.();
                   }}
-                  className="px-6 py-3 text-sm font-medium text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
+                  className="px-6 py-3 text-sm font-medium text-gray-800 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
                 >
                   Pular
                 </button>
@@ -220,32 +220,36 @@ export default function FeedbackPrompt({
 
         {step === 'comment' && (
           <div className="space-y-4 animate-in slide-in-from-bottom-4 duration-300">
-            <div className="flex items-center gap-3 p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-800">
-              <AlertCircle className="w-6 h-6 text-orange-600 dark:text-orange-400 flex-shrink-0" />
-              <p className="text-sm text-gray-900 dark:text-white">
+            <div className="flex items-center gap-3 p-4 bg-orange-100 dark:bg-orange-900/20 rounded-lg border border-orange-300 dark:border-orange-800">
+              <AlertCircle className="w-6 h-6 text-orange-700 dark:text-orange-400 flex-shrink-0" />
+              <p className="text-sm text-gray-950 dark:text-white font-semibold">
                 <strong>Poxa! </strong> Conte-nos o que aconteceu para melhorarmos.
               </p>
             </div>
             <textarea
               value={comment}
               onChange={(e) => setComment(e.target.value)}
-              placeholder="O que poderia ser melhor? Seja específico..."
+              placeholder="O que poderia ser melhor? (opcional)"
               className="w-full px-4 py-3 text-sm bg-gray-50 dark:bg-gray-900 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-orange-500 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 resize-none"
               rows={4}
               autoFocus
             />
-            <button
-              onClick={handleSubmitFinal}
-              disabled={comment.trim().length < 10}
-              className="w-full px-6 py-3 text-base font-bold text-white bg-gradient-to-r from-orange-600 to-red-600 rounded-xl hover:shadow-xl transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-            >
-              Enviar Feedback
-            </button>
-            {comment.trim().length < 10 && (
-              <p className="text-xs text-center text-gray-500 dark:text-gray-400">
-                Mínimo 10 caracteres para enviar
-              </p>
-            )}
+            <div className="flex gap-3">
+              <button
+                onClick={handleSubmitFinal}
+                className="flex-1 px-6 py-3 text-base font-bold text-white bg-gradient-to-r from-orange-600 to-red-600 rounded-xl hover:shadow-xl transition-all"
+              >
+                {comment.trim() ? 'Enviar Feedback' : 'Pular'}
+              </button>
+              {canClose && (
+                <button
+                  onClick={onDismiss}
+                  className="px-6 py-3 text-sm font-medium text-gray-800 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-xl transition-colors"
+                >
+                  Fechar
+                </button>
+              )}
+            </div>
           </div>
         )}
 

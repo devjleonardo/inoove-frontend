@@ -13,6 +13,7 @@ export interface LoginResponseDTO {
   createdAt: string;
   chatId: string;
   role?: 'user' | 'admin';
+  gptMakerWorkspaceId?: string;
 }
 
 export const authService = {

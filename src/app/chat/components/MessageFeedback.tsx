@@ -66,8 +66,8 @@ export default function MessageFeedback({ messageId, onFeedback }: MessageFeedba
                 onClick={() => toggleIssue(issue)}
                 className={`text-xs px-3 py-1.5 rounded-full transition-all ${
                   selectedIssues.includes(issue)
-                    ? 'bg-red-500 text-white'
-                    : 'bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
+                    ? 'bg-red-600 text-white'
+                    : 'bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-300 hover:bg-gray-300 dark:hover:bg-gray-600'
                 }`}
               >
                 {issue}
@@ -120,8 +120,8 @@ export default function MessageFeedback({ messageId, onFeedback }: MessageFeedba
         disabled={selectedFeedback !== null}
         className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-medium text-sm transition-all ${
           selectedFeedback === 'positive'
-            ? 'bg-green-500 text-white shadow-lg scale-105'
-            : 'bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 hover:bg-green-100 dark:hover:bg-green-900/30 hover:scale-105 border border-green-200 dark:border-green-800'
+            ? 'bg-green-600 text-white shadow-lg scale-105'
+            : 'bg-green-100 dark:bg-green-900/20 text-green-700 dark:text-green-400 hover:bg-green-200 dark:hover:bg-green-900/30 hover:scale-105 border border-green-300 dark:border-green-800'
         } disabled:cursor-not-allowed disabled:opacity-50`}
         title="Resposta útil"
       >
@@ -134,8 +134,8 @@ export default function MessageFeedback({ messageId, onFeedback }: MessageFeedba
         disabled={selectedFeedback !== null}
         className={`flex items-center gap-1.5 px-3 py-2 rounded-lg font-medium text-sm transition-all ${
           selectedFeedback === 'negative'
-            ? 'bg-red-500 text-white shadow-lg scale-105'
-            : 'bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 hover:bg-red-100 dark:hover:bg-red-900/30 hover:scale-105 border border-red-200 dark:border-red-800'
+            ? 'bg-red-600 text-white shadow-lg scale-105'
+            : 'bg-red-100 dark:bg-red-900/20 text-red-700 dark:text-red-400 hover:bg-red-200 dark:hover:bg-red-900/30 hover:scale-105 border border-red-300 dark:border-red-800'
         } disabled:cursor-not-allowed disabled:opacity-50`}
         title="Resposta não útil"
       >
@@ -147,14 +147,14 @@ export default function MessageFeedback({ messageId, onFeedback }: MessageFeedba
 
       <button
         onClick={() => onFeedback(messageId, 'report')}
-        className="p-2 rounded-lg text-orange-600 dark:text-orange-400 hover:bg-orange-50 dark:hover:bg-orange-900/20 transition-all hover:scale-105 border border-orange-200 dark:border-orange-800"
+        className="p-2 rounded-lg text-orange-700 dark:text-orange-400 hover:bg-orange-100 dark:hover:bg-orange-900/20 transition-all hover:scale-105 border border-orange-300 dark:border-orange-800"
         title="Reportar problema"
       >
         <Flag className="w-4 h-4" />
       </button>
 
       {selectedFeedback === 'positive' && (
-        <span className="text-xs text-green-600 dark:text-green-400 font-medium animate-in fade-in slide-in-from-left-2 duration-300 ml-2">
+        <span className="text-xs text-green-700 dark:text-green-400 font-medium animate-in fade-in slide-in-from-left-2 duration-300 ml-2">
           ✨ Obrigado pelo feedback!
         </span>
       )}

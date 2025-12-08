@@ -2,17 +2,16 @@
 
 import {
   LayoutDashboard,
-  BarChart3,
-  DollarSign,
-  GraduationCap,
-  TrendingUp,
   Users,
-  MessageSquare,
-  Settings,
-  ChevronLeft,
-  ChevronRight
+  ChevronDown,
+  User,
+  LogOut,
+  BookOpen,
+  Bot
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 
 interface AdminSidebarProps {
@@ -22,7 +21,26 @@ interface AdminSidebarProps {
 }
 
 export default function AdminSidebar({ isDarkMode, activeSection, onSectionChange }: AdminSidebarProps) {
-  const [isCollapsed, setIsCollapsed] = useState(false);
+  const { user, logout } = useAuth();
+  const router = useRouter();
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    }
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  const handleLogout = () => {
+    logout();
+    router.push('/');
+  };
 
   const menuItems = [
     {
@@ -32,28 +50,16 @@ export default function AdminSidebar({ isDarkMode, activeSection, onSectionChang
       description: 'Dashboard principal'
     },
     {
-      id: 'analytics',
-      label: 'Analytics',
-      icon: BarChart3,
-      description: 'Análises detalhadas'
-    },
-    {
-      id: 'costs',
-      label: 'Custos & Tokens',
-      icon: DollarSign,
-      description: 'Controle financeiro'
+      id: 'agents',
+      label: 'Agentes',
+      icon: Bot,
+      description: 'Sincronizar agentes'
     },
     {
       id: 'training',
       label: 'Treinamento',
-      icon: GraduationCap,
-      description: 'Gaps e sugestões'
-    },
-    {
-      id: 'performance',
-      label: 'Performance',
-      icon: TrendingUp,
-      description: 'Métricas de eficiência'
+      icon: BookOpen,
+      description: 'Candidatos pendentes'
     },
     {
       id: 'users',
@@ -64,48 +70,27 @@ export default function AdminSidebar({ isDarkMode, activeSection, onSectionChang
   ];
 
   return (
-    <aside
-      className={`
-        relative h-full bg-white dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700
-        transition-all duration-300 flex flex-col
-        ${isCollapsed ? 'w-20' : 'w-72'}
-      `}
-    >
+    <aside className="w-72 h-full bg-[#FFDE14] dark:bg-[#121212] border-r border-gray-400 dark:border-gray-800 transition-all duration-700 flex flex-col">
       {/* Header */}
-      <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-        <div className="flex items-center justify-between">
-          {!isCollapsed && (
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 flex items-center justify-center">
-                <Image
-                  src={isDarkMode ? "/askia/ASKIA_03.png" : "/askia/ASKIA_04.png"}
-                  alt="ASKIA Logo"
-                  width={40}
-                  height={40}
-                  className="object-contain"
-                />
-              </div>
-              <div>
-                <h2 className="text-lg font-bold text-gray-900 dark:text-white">
-                  Askia Admin
-                </h2>
-                <p className="text-xs text-gray-600 dark:text-gray-400">
-                  Inteligência Organizacional
-                </p>
-              </div>
-            </div>
-          )}
-          {isCollapsed && (
-            <div className="w-10 h-10 flex items-center justify-center mx-auto">
-              <Image
-                src={isDarkMode ? "/askia/ASKIA_03.png" : "/askia/ASKIA_04.png"}
-                alt="ASKIA Logo"
-                width={40}
-                height={40}
-                className="object-contain"
-              />
-            </div>
-          )}
+      <div className="p-6 border-b border-gray-400 dark:border-gray-800">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 flex items-center justify-center">
+            <Image
+              src={isDarkMode ? "/askia/ASKIA_03.png" : "/askia/ASKIA_04.png"}
+              alt="ASKIA Logo"
+              width={40}
+              height={40}
+              className="object-contain"
+            />
+          </div>
+          <div>
+            <h2 className="text-lg font-bold text-gray-950 dark:text-white">
+              Askia Admin
+            </h2>
+            <p className="text-xs text-gray-700 dark:text-gray-400">
+              Inteligência Organizacional
+            </p>
+          </div>
         </div>
       </div>
 
@@ -121,47 +106,63 @@ export default function AdminSidebar({ isDarkMode, activeSection, onSectionChang
                 key={item.id}
                 onClick={() => onSectionChange(item.id)}
                 className={`
-                  w-full flex items-center gap-3 p-3 rounded-xl transition-all group
+                  w-full flex items-center gap-3 p-3 rounded-lg transition-all group
                   ${isActive
-                    ? 'bg-gradient-to-r from-[#FFDE14] to-[#FFEA5F] dark:from-[#FFDE14] dark:to-[#FFEA5F] text-gray-900 shadow-lg'
-                    : 'hover:bg-gray-100 dark:hover:bg-gray-700/50 text-gray-600 dark:text-gray-400'
+                    ? 'bg-white/40 dark:bg-[#FFDE14]/20'
+                    : 'hover:bg-white/20 dark:hover:bg-white/5'
                   }
-                  ${isCollapsed ? 'justify-center' : ''}
                 `}
-                title={isCollapsed ? item.label : undefined}
               >
-                <Icon className={`w-5 h-5 flex-shrink-0 ${isActive ? 'text-gray-900' : ''}`} />
-                {!isCollapsed && (
-                  <div className="flex-1 text-left">
-                    <p className={`text-sm font-semibold ${isActive ? 'text-gray-900' : ''}`}>
-                      {item.label}
-                    </p>
-                    <p className={`text-xs ${isActive ? 'text-gray-700' : 'text-gray-500 dark:text-gray-500'}`}>
-                      {item.description}
-                    </p>
-                  </div>
-                )}
+                <Icon className={`w-5 h-5 flex-shrink-0 ${isActive ? 'text-gray-950 dark:text-[#FFDE14]' : 'text-gray-700 dark:text-gray-400'}`} />
+                <div className="flex-1 text-left">
+                  <p className={`text-sm font-semibold ${isActive ? 'text-gray-950 dark:text-[#FFDE14]' : 'text-gray-700 dark:text-gray-400'}`}>
+                    {item.label}
+                  </p>
+                  <p className={`text-xs ${isActive ? 'text-gray-700 dark:text-[#FFDE14]/80' : 'text-gray-600 dark:text-gray-500'}`}>
+                    {item.description}
+                  </p>
+                </div>
               </button>
             );
           })}
         </div>
       </nav>
 
-      {/* Footer - Collapse Button */}
-      <div className="p-4 border-t border-gray-200 dark:border-gray-700">
-        <button
-          onClick={() => setIsCollapsed(!isCollapsed)}
-          className="w-full flex items-center justify-center gap-2 p-3 rounded-xl bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors text-gray-600 dark:text-gray-400"
-        >
-          {isCollapsed ? (
-            <ChevronRight className="w-5 h-5" />
-          ) : (
-            <>
-              <ChevronLeft className="w-5 h-5" />
-              <span className="text-sm font-medium">Recolher</span>
-            </>
+      {/* Footer - Profile Button */}
+      <div className="p-4 border-t border-gray-400 dark:border-gray-800" ref={dropdownRef}>
+        <div className="relative">
+          <button
+            onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+            className="w-full flex items-center gap-3 p-3 rounded-lg bg-gray-900/90 dark:bg-[#FFDE14]/10 hover:bg-gray-900 dark:hover:bg-[#FFDE14]/20 transition-colors border border-white/20 dark:border-transparent"
+          >
+            <div className="w-10 h-10 rounded-full bg-white dark:bg-gray-700 flex items-center justify-center">
+              <User className="w-6 h-6 text-gray-900 dark:text-white" />
+            </div>
+            <div className="flex-1 text-left">
+              <p className="text-sm font-medium text-white dark:text-white truncate">
+                {user?.name || 'Usuário'}
+              </p>
+              <p className="text-xs text-gray-300 dark:text-gray-400 truncate">
+                {user?.email || ''}
+              </p>
+            </div>
+            <ChevronDown className={`w-5 h-5 text-white dark:text-white transition-transform ${isDropdownOpen ? 'rotate-180' : ''}`} />
+          </button>
+
+          {isDropdownOpen && (
+            <div className="absolute bottom-full left-0 right-0 mb-2 bg-white dark:bg-gray-800 rounded-lg shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
+              <button
+                onClick={handleLogout}
+                className="w-full flex items-center gap-3 p-3 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors text-left"
+              >
+                <LogOut className="w-5 h-5 text-red-600 dark:text-red-400" />
+                <span className="text-sm font-medium text-red-600 dark:text-red-400">
+                  Sair
+                </span>
+              </button>
+            </div>
           )}
-        </button>
+        </div>
       </div>
     </aside>
   );

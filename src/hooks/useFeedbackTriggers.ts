@@ -30,11 +30,11 @@ export function useFeedbackTriggers({
   }>({});
 
   const TRIGGERS = {
-    AFTER_EVERY_N_RESPONSES: 3,
-    PERIODIC_CHECK: 5,
-    NEW_CONVERSATION_DELAY: 2,
-    BEFORE_NEW_CHAT_THRESHOLD: 4,
-    MIN_TIME_BETWEEN_PROMPTS: 60000,
+    AFTER_EVERY_N_RESPONSES: 6,
+    PERIODIC_CHECK: 8,
+    NEW_CONVERSATION_DELAY: 4,
+    BEFORE_NEW_CHAT_THRESHOLD: 6,
+    MIN_TIME_BETWEEN_PROMPTS: 120000,
   };
 
   const canShowPrompt = useCallback((convId: string) => {

@@ -69,7 +69,7 @@ export default function EmptyChat({ isDarkMode }: EmptyChatProps) {
             <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-[#FFDE14] dark:via-[#FFEA5F] dark:to-[#FFDE14] bg-clip-text text-transparent animate-gradient-x" style={{ backgroundSize: '200% 200%' }}>
               Como posso ajudar você hoje?
             </h2>
-            <p className="text-base md:text-lg text-gray-900 dark:text-gray-400 mt-2 font-semibold">
+            <p className="text-base md:text-lg text-gray-950 dark:text-gray-400 mt-2 font-bold">
               Explore as possibilidades infinitas da Aksia Irrah
             </p>
           </div>
@@ -79,10 +79,10 @@ export default function EmptyChat({ isDarkMode }: EmptyChatProps) {
 
         {/* Texto de incentivo */}
         <div className="animate-in fade-in duration-1000" style={{ animationDelay: '600ms' }}>
-          <p className="text-sm text-gray-900 dark:text-gray-500 flex items-center justify-center gap-2 font-semibold">
-            <Sparkles className="w-4 h-4 animate-pulse" />
+          <p className="text-sm text-gray-950 dark:text-gray-500 flex items-center justify-center gap-2 font-bold">
+            <Sparkles className="w-4 h-4 animate-pulse text-purple-600 dark:text-gray-400" />
             Digite sua pergunta no campo abaixo para começar
-            <Zap className="w-4 h-4 animate-pulse" style={{ animationDelay: '0.5s' }} />
+            <Zap className="w-4 h-4 animate-pulse text-blue-600 dark:text-gray-400" style={{ animationDelay: '0.5s' }} />
           </p>
         </div>
       </div>

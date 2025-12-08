@@ -4,6 +4,9 @@ export interface CreateAccountRequestDTO {
   name: string;
   email: string;
   password: string;
+  businessUnit: string;
+  sector?: string;
+  unep?: string;
 }
 
 export interface AccountResponseDTO {
@@ -13,6 +16,7 @@ export interface AccountResponseDTO {
   createdAt: string;
   chatId: string;
   role?: 'user' | 'admin';
+  gptMakerWorkspaceId?: string;
 }
 
 export const accountService = {

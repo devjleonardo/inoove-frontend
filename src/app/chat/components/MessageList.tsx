@@ -123,9 +123,9 @@ export default function MessageList({ messages, isLoading, isDarkMode, messagesE
                     title={copiedId === message.id ? 'Copiado!' : 'Copiar mensagem'}
                   >
                     {copiedId === message.id ? (
-                      <Check className="w-4 h-4 text-green-600 dark:text-green-400" />
+                      <Check className="w-4 h-4 text-green-700 dark:text-green-400" />
                     ) : (
-                      <Copy className="w-4 h-4 text-gray-600 dark:text-gray-400" />
+                      <Copy className="w-4 h-4 text-gray-700 dark:text-gray-400" />
                     )}
                   </button>
                 )}

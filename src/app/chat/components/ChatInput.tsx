@@ -25,7 +25,7 @@ export default function ChatInput({ input, isLoading, onInputChange, onSubmit, i
   }, [input]);
 
   return (
-    <div className="relative mx-52 bg-[#FFDE14] dark:bg-[#121212] transition-colors duration-700">
+    <div className="relative mx-64 bg-[#FFDE14] dark:bg-[#121212] transition-colors duration-700">
         <form onSubmit={onSubmit} className="relative">
           <div className="relative flex items-end gap-3 px-6 py-3 rounded-3xl bg-[#1e1e1e] dark:bg-[#1e1e1e] border-2 border-gray-700 dark:border-[#FFDE14]/40 transition-all duration-200">
             <div className="flex-1 relative">
@@ -63,7 +63,7 @@ export default function ChatInput({ input, isLoading, onInputChange, onSubmit, i
 
       <div className="mt-3 mb-2 flex items-center justify-center">
         <div className="inline-flex items-center gap-1.5 px-3 py-2 rounded-lg border border-gray-400 dark:border-gray-700 bg-white/80 dark:bg-black/50 backdrop-blur-sm">
-          <span className="w-1.5 h-1.5 rounded-full bg-green-500"></span>
+          <span className="w-1.5 h-1.5 rounded-full bg-orange-400"></span>
           <p className="text-xs text-gray-900 dark:text-gray-400 font-medium">
             A ASKIA pode cometer erros. Verifique informações importantes.
           </p>
