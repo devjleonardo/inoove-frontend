@@ -91,7 +91,7 @@ export default function LoginPage() {
                 className="object-contain"
               />
               <Image
-                src="/askia/ASKIA_02.png"
+                src={isDarkMode ? "/askia/ASKIA_02.png" : "/askia/Ativo 2.png"}
                 alt="ASKIA"
                 width={150}
                 height={45}

@@ -78,13 +78,13 @@ export default function OverviewSection({ isDarkMode }: OverviewSectionProps) {
   }
   return (
     <div className="space-y-8">
-      {/* Stats Overview */}
+      
       <div>
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
           Métricas Principais
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {/* Intervalo Médio de Mensagens */}
+          
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
@@ -104,7 +104,7 @@ export default function OverviewSection({ isDarkMode }: OverviewSectionProps) {
             </div>
           </div>
 
-          {/* Taxa de Reuso de Conhecimento */}
+          
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
@@ -124,7 +124,6 @@ export default function OverviewSection({ isDarkMode }: OverviewSectionProps) {
             </div>
           </div>
 
-          {/* Perguntas Não Respondidas */}
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
@@ -146,13 +145,13 @@ export default function OverviewSection({ isDarkMode }: OverviewSectionProps) {
         </div>
       </div>
 
-      {/* Confidence Metrics */}
+      
       <div>
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">
           Métricas de Confiança
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Average Confidence */}
+          
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
@@ -172,7 +171,7 @@ export default function OverviewSection({ isDarkMode }: OverviewSectionProps) {
             </div>
           </div>
 
-          {/* High Confidence Count */}
+          
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
@@ -192,7 +191,7 @@ export default function OverviewSection({ isDarkMode }: OverviewSectionProps) {
             </div>
           </div>
 
-          {/* Low Confidence Count */}
+          
           <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
             <div className="flex items-center justify-between">
               <div>
@@ -214,14 +213,14 @@ export default function OverviewSection({ isDarkMode }: OverviewSectionProps) {
         </div>
       </div>
 
-      {/* Knowledge Heatmap */}
+      
       <div>
         <KnowledgeHeatmap isDarkMode={isDarkMode} />
       </div>
 
-      {/* Two Column Section */}
+      
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Top Tópicos */}
+        
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -259,7 +258,7 @@ export default function OverviewSection({ isDarkMode }: OverviewSectionProps) {
           </div>
         </div>
 
-        {/* Uso por Agente */}
+        
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -307,7 +306,7 @@ export default function OverviewSection({ isDarkMode }: OverviewSectionProps) {
         </div>
       </div>
 
-      {/* Perguntas por Tipo de Usuário */}
+      
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -347,9 +346,9 @@ export default function OverviewSection({ isDarkMode }: OverviewSectionProps) {
         </div>
       </div>
 
-      {/* Confidence Analysis */}
+      
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Confidence by User Type */}
+        
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -391,7 +390,7 @@ export default function OverviewSection({ isDarkMode }: OverviewSectionProps) {
           </div>
         </div>
 
-        {/* Confidence by Agent */}
+        
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -447,7 +446,7 @@ export default function OverviewSection({ isDarkMode }: OverviewSectionProps) {
         </div>
       </div>
 
-      {/* Low Confidence Messages */}
+      
       <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-xl font-bold text-gray-900 dark:text-white">

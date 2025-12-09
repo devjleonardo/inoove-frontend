@@ -7,7 +7,8 @@ import {
   User,
   LogOut,
   BookOpen,
-  Bot
+  Bot,
+  Brain
 } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
@@ -50,6 +51,12 @@ export default function AdminSidebar({ isDarkMode, activeSection, onSectionChang
       description: 'Dashboard principal'
     },
     {
+      id: 'intelligence',
+      label: 'Inteligência',
+      icon: Brain,
+      description: 'Inteligência organizacional'
+    },
+    {
       id: 'agents',
       label: 'Agentes',
       icon: Bot,
@@ -71,7 +78,7 @@ export default function AdminSidebar({ isDarkMode, activeSection, onSectionChang
 
   return (
     <aside className="w-72 h-full bg-[#FFDE14] dark:bg-[#121212] border-r border-gray-400 dark:border-gray-800 transition-all duration-700 flex flex-col">
-      {/* Header */}
+      
       <div className="p-6 border-b border-gray-400 dark:border-gray-800">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 flex items-center justify-center">
@@ -94,7 +101,7 @@ export default function AdminSidebar({ isDarkMode, activeSection, onSectionChang
         </div>
       </div>
 
-      {/* Menu Items */}
+      
       <nav className="flex-1 p-4 overflow-y-auto">
         <div className="space-y-2">
           {menuItems.map((item) => {
@@ -128,7 +135,7 @@ export default function AdminSidebar({ isDarkMode, activeSection, onSectionChang
         </div>
       </nav>
 
-      {/* Footer - Profile Button */}
+      
       <div className="p-4 border-t border-gray-400 dark:border-gray-800" ref={dropdownRef}>
         <div className="relative">
           <button

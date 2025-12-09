@@ -6,6 +6,7 @@ import { useRouter } from 'next/navigation';
 import { ArrowLeft, Sun, Moon, MessageSquare } from 'lucide-react';
 import AdminSidebar from './components/AdminSidebar';
 import OverviewSection from './sections/OverviewSection';
+import IntelligenceSection from './sections/IntelligenceSection';
 import AgentsSyncSection from './sections/AgentsSyncSection';
 import TrainingCandidatesSection from './sections/TrainingCandidatesSection';
 
@@ -43,7 +44,7 @@ export default function AdminPage() {
     }
 
     if (user?.role !== 'admin') {
-      router.push('/chat');
+      router.back();
       return;
     }
 
@@ -75,6 +76,8 @@ export default function AdminPage() {
     switch (activeSection) {
       case 'overview':
         return 'Visão Geral';
+      case 'intelligence':
+        return 'Inteligência Organizacional';
       case 'agents':
         return 'Sincronização de Agentes';
       case 'training':
@@ -160,6 +163,7 @@ export default function AdminPage() {
         <main className="flex-1 overflow-y-auto p-6">
           <div className="max-w-7xl mx-auto">
             {activeSection === 'overview' && <OverviewSection isDarkMode={isDarkMode} />}
+            {activeSection === 'intelligence' && <IntelligenceSection isDarkMode={isDarkMode} />}
             {activeSection === 'agents' && <AgentsSyncSection isDarkMode={isDarkMode} />}
             {activeSection === 'training' && <TrainingCandidatesSection isDarkMode={isDarkMode} />}
             {activeSection === 'users' && (

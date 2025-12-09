@@ -55,7 +55,7 @@ export default function ConversationFeedback({
           Que ótimo! Como você avalia sua experiência? ⭐
         </p>
 
-        {/* Star Rating */}
+        
         <div className="flex justify-center gap-2 mb-4">
           {[1, 2, 3, 4, 5].map((star) => (
             <button

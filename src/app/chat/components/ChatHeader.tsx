@@ -27,7 +27,7 @@ export default function ChatHeader({ isDarkMode, onOpenSidebar }: ChatHeaderProp
           className="object-contain"
         />
         <Image
-          src="/askia/ASKIA_02.png"
+          src={isDarkMode ? "/askia/ASKIA_02.png" : "/askia/Ativo 2.png"}
           alt="ASKIA"
           width={80}
           height={24}

@@ -18,7 +18,7 @@ export default function CostsSection({ isDarkMode }: CostsSectionProps) {
         </p>
       </div>
 
-      {/* Overview Financeiro */}
+      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div className="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
           <div className="flex items-center justify-between mb-4">
@@ -61,7 +61,7 @@ export default function CostsSection({ isDarkMode }: CostsSectionProps) {
         </div>
       </div>
 
-      {/* Detalhamento de Custos por Agente */}
+      
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -162,7 +162,7 @@ export default function CostsSection({ isDarkMode }: CostsSectionProps) {
         </div>
       </div>
 
-      {/* GPT Maker - Créditos vs Tokens */}
+      
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -170,7 +170,7 @@ export default function CostsSection({ isDarkMode }: CostsSectionProps) {
           </h3>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Créditos */}
+          
           <div className="p-6 bg-gradient-to-br from-purple-50 to-blue-50 dark:from-purple-900/20 dark:to-blue-900/20 rounded-xl border border-purple-200 dark:border-purple-800">
             <h4 className="text-sm font-bold text-gray-900 dark:text-white mb-4">
               💳 Sistema de Créditos
@@ -200,7 +200,7 @@ export default function CostsSection({ isDarkMode }: CostsSectionProps) {
             </div>
           </div>
 
-          {/* Tokens OpenAI */}
+          
           <div className="p-6 bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
             <h4 className="text-sm font-bold text-gray-900 dark:text-white mb-4">
               ⚡ Tokens OpenAI
@@ -237,9 +237,9 @@ export default function CostsSection({ isDarkMode }: CostsSectionProps) {
         </div>
       </div>
 
-      {/* Projeções e Alertas */}
+      
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {/* Projeção de Gastos */}
+        
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-2 mb-4">
             <TrendingUp className="w-5 h-5 text-blue-600 dark:text-blue-400" />
@@ -264,7 +264,7 @@ export default function CostsSection({ isDarkMode }: CostsSectionProps) {
           </div>
         </div>
 
-        {/* Alertas de Otimização */}
+        
         <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700">
           <div className="flex items-center gap-2 mb-4">
             <AlertTriangle className="w-5 h-5 text-orange-600 dark:text-orange-400" />
@@ -301,7 +301,7 @@ export default function CostsSection({ isDarkMode }: CostsSectionProps) {
         </div>
       </div>
 
-      {/* ROI e Economia */}
+      
       <div className="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl shadow-xl p-6 border border-green-200 dark:border-green-800">
         <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
           💰 Retorno sobre Investimento (ROI)

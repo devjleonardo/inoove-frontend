@@ -18,7 +18,7 @@ export default function AnalyticsSection({ isDarkMode }: AnalyticsSectionProps) 
         </p>
       </div>
 
-      {/* Top Assuntos Mais Consultados */}
+      
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -72,7 +72,7 @@ export default function AnalyticsSection({ isDarkMode }: AnalyticsSectionProps) 
         </div>
       </div>
 
-      {/* Volume por UNEP */}
+      
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -112,7 +112,7 @@ export default function AnalyticsSection({ isDarkMode }: AnalyticsSectionProps) 
         </div>
       </div>
 
-      {/* Horários de Pico */}
+      
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -154,7 +154,7 @@ export default function AnalyticsSection({ isDarkMode }: AnalyticsSectionProps) 
         </div>
       </div>
 
-      {/* Taxa de Perguntas Repetidas */}
+      
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-xl font-bold text-gray-900 dark:text-white">
@@ -190,7 +190,7 @@ export default function AnalyticsSection({ isDarkMode }: AnalyticsSectionProps) 
         </div>
       </div>
 
-      {/* Taxa de Perguntas Sem Resposta Satisfatória */}
+      
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700">
         <div className="flex items-center justify-between mb-6">
           <h3 className="text-xl font-bold text-gray-900 dark:text-white">

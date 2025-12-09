@@ -52,7 +52,7 @@ export default function Sidebar({
               />
             </div>
             <Image
-              src="/askia/ASKIA_02.png"
+              src={isDarkMode ? "/askia/ASKIA_02.png" : "/askia/Ativo 2.png"}
               alt="ASKIA"
               width={100}
               height={30}

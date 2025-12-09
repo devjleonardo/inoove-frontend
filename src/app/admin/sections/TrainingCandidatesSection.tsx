@@ -142,7 +142,7 @@ export default function TrainingCandidatesSection({ isDarkMode }: TrainingCandid
               >
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 space-y-3">
-                    {/* Question */}
+                    
                     <div>
                       <div className="flex items-center gap-2 mb-2">
                         <MessageSquare className="w-4 h-4 text-blue-600 dark:text-blue-400" />
@@ -155,7 +155,7 @@ export default function TrainingCandidatesSection({ isDarkMode }: TrainingCandid
                       </p>
                     </div>
 
-                    {/* Answer */}
+                    
                     <div>
                       <div className="flex items-center gap-2 mb-2">
                         <CheckCircle className="w-4 h-4 text-green-600 dark:text-green-400" />
@@ -168,7 +168,7 @@ export default function TrainingCandidatesSection({ isDarkMode }: TrainingCandid
                       </p>
                     </div>
 
-                    {/* Metadata */}
+                    
                     <div className="flex items-center gap-4 text-xs text-gray-600 dark:text-gray-400">
                       <div className="flex items-center gap-1">
                         <Calendar className="w-3 h-3" />
@@ -186,7 +186,7 @@ export default function TrainingCandidatesSection({ isDarkMode }: TrainingCandid
                     </div>
                   </div>
 
-                  {/* Convert Button */}
+                  
                   <button
                     onClick={() => openConvertModal(candidate)}
                     className="flex items-center gap-2 px-4 py-3 bg-gradient-to-r from-[#FFDE14] to-[#FFEA5F] hover:from-[#E6C800] hover:to-[#E6D54A] text-gray-900 font-bold rounded-xl transition-all hover:shadow-lg"
@@ -201,7 +201,7 @@ export default function TrainingCandidatesSection({ isDarkMode }: TrainingCandid
         )}
       </div>
 
-      {/* Convert Modal */}
+      
       {showModal && selectedCandidate && (
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
           <div className="bg-white dark:bg-gray-800 rounded-2xl p-6 max-w-lg w-full shadow-2xl border-2 border-[#FFDE14]">

@@ -45,7 +45,7 @@ export default function FeedbackGamification({
 
   return (
     <div className="fixed bottom-6 right-6 z-50 animate-in slide-in-from-bottom-8 duration-500">
-      {/* Confetti effect */}
+      
       {showConfetti && (
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           {Array.from({ length: 20 }).map((_, i) => (
@@ -65,7 +65,7 @@ export default function FeedbackGamification({
       )}
 
       <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl border-2 border-[#FFDE14] dark:border-[#FFDE14] p-6 w-80 relative overflow-hidden">
-        {/* Background pattern */}
+        
         <div className="absolute inset-0 opacity-5 dark:opacity-10"
              style={{
                backgroundImage: 'linear-gradient(45deg, #000 25%, transparent 25%), linear-gradient(-45deg, #000 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #000 75%), linear-gradient(-45deg, transparent 75%, #000 75%)',
@@ -74,7 +74,7 @@ export default function FeedbackGamification({
              }}
         />
 
-        {/* Header */}
+        
         <div className="relative mb-4">
           <div className="flex items-center justify-between mb-3">
             <div className="flex items-center gap-2">
@@ -98,7 +98,7 @@ export default function FeedbackGamification({
             </button>
           </div>
 
-          {/* Streak */}
+          
           {streak > 0 && (
             <div className="flex items-center gap-2 px-3 py-2 bg-orange-50 dark:bg-orange-900/20 rounded-lg border border-orange-200 dark:border-orange-800">
               <Flame className="w-4 h-4 text-orange-500 animate-pulse" />
@@ -109,7 +109,7 @@ export default function FeedbackGamification({
           )}
         </div>
 
-        {/* Daily Goal Progress */}
+        
         <div className="relative mb-4">
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
@@ -123,7 +123,7 @@ export default function FeedbackGamification({
             </span>
           </div>
 
-          {/* Progress bar */}
+          
           <div className="relative h-3 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
             <div
               className={`absolute inset-y-0 left-0 rounded-full transition-all duration-500 ${
@@ -151,7 +151,7 @@ export default function FeedbackGamification({
           )}
         </div>
 
-        {/* Stats Grid */}
+        
         <div className="grid grid-cols-2 gap-3 mb-4">
           <div className="p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg border border-blue-200 dark:border-blue-800">
             <div className="flex items-center gap-2 mb-1">
@@ -174,7 +174,7 @@ export default function FeedbackGamification({
           </div>
         </div>
 
-        {/* Motivational message */}
+        
         <div className="p-3 bg-gradient-to-r from-[#FFDE14]/20 to-[#FFEA5F]/20 dark:from-[#FFDE14]/10 dark:to-[#FFEA5F]/10 rounded-lg border border-[#FFDE14]/30">
           <div className="flex items-start gap-2">
             <TrendingUp className="w-4 h-4 text-[#FFDE14] flex-shrink-0 mt-0.5" />
