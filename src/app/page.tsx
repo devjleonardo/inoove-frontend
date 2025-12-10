@@ -111,13 +111,13 @@ export default function LoginPage() {
 
           <div className="relative max-w-md">
             <div className="space-y-0">
-              <h3 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 dark:text-white leading-tight">
+              <h3 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 dark:text-[#FFDE14] leading-tight">
                 Pergunte.
               </h3>
-              <h3 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 dark:text-white leading-tight">
+              <h3 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-gray-900 dark:text-[#FFDE14] leading-tight">
                 Descubra.
               </h3>
-              <h3 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-[#FFF] dark:text-[#FFDE14] leading-tight">
+              <h3 className="text-5xl md:text-6xl lg:text-7xl font-extrabold text-[#FFF] dark:text-white leading-tight">
                 Resolva.
               </h3>
             </div>
