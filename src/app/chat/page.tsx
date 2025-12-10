@@ -4,14 +4,17 @@ import { useState, useRef, useEffect } from 'react';
 import { X, Sun, Moon, Shield } from 'lucide-react';
 import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
-import { chatService, Conversation, MessageDTO } from '@/services/chatService';
-import { feedbackService } from '@/services/feedbackService';
+import { chatService, Conversation, MessageDTO } from '@/services/v1/chatService';
+import { feedbackService } from '@/services/v1/feedbackService';
 import Sidebar from './components/Sidebar';
 import ChatHeader from './components/ChatHeader';
 import EmptyChat from './components/EmptyChat';
 import MessageList from './components/MessageList';
 import ChatInput from './components/ChatInput';
 import SettingsModal from './components/SettingsModal';
+import { conversationServiceV2 } from '@/services/v2/conversationServiceV2';
+
+const API_VERSION = process.env.NEXT_PUBLIC_API_VERSION || 'v1';
 
 interface Message {
   id: string;
@@ -99,8 +102,16 @@ export default function ChatPage() {
 
     setIsLoadingConversations(true);
     try {
-      const data = await chatService.listConversations(user.chatId);
-      setConversations(data);
+      if (API_VERSION === 'v2') {
+        const data = await conversationServiceV2.listConversations(user.chatId);
+        setConversations(data.map((conv : any) => ({
+          ...conv,
+          createdAt: conv.updatedAt
+        })));
+      } else {
+        const data = await chatService.listConversations(user.chatId);
+        setConversations(data);
+      }
     } catch (error: any) {
       console.error('Erro ao carregar conversas:', error);
     } finally {
@@ -110,14 +121,25 @@ export default function ChatPage() {
 
   const loadMessages = async (conversationId: string) => {
     try {
-      const data = await chatService.getMessages(user!.chatId, conversationId);
-      const formattedMessages: Message[] = data.map((msg: any) => ({
-        id: msg.id,
-        role: msg.role,
-        content: msg.content,
-        timestamp: new Date(msg.createdAt),
-      }));
-      setMessages(formattedMessages);
+      if (API_VERSION === 'v2') {
+        const data = await conversationServiceV2.listMessages(user!.chatId, conversationId);
+        const formattedMessages: Message[] = data.map((msg : any) => ({
+          id: msg.id,
+          role: msg.role as 'user' | 'assistant',
+          content: msg.content,
+          timestamp: new Date(msg.timestamp),
+        }));
+        setMessages(formattedMessages);
+      } else {
+        const data = await chatService.getMessages(user!.chatId, conversationId);
+        const formattedMessages: Message[] = data.map((msg) => ({
+          id: msg.id,
+          role: msg.role,
+          content: msg.content,
+          timestamp: new Date(msg.createdAt),
+        }));
+        setMessages(formattedMessages);
+      }
     } catch (error: any) {
       console.error('Erro ao carregar mensagens:', error);
     }
@@ -148,18 +170,39 @@ export default function ChatPage() {
         msg.id === messageId ? { ...msg, status: 'sent' as const } : msg
       ));
 
-      const response = await chatService.ask(user.chatId, conversationToUse?.id, {
-        text: userInput,
-        userId: user.id,
-      });
+      let response;
+      if (API_VERSION === 'v2') {
+        response = await conversationServiceV2.sendMessage({
+          conversationId: conversationToUse?.id,
+          userId: user.id,
+          content: userInput,
+        });
+      } else {
+        response = await chatService.ask(user.chatId, conversationToUse?.id, {
+          text: userInput,
+          userId: user.id,
+        });
+      }
 
       if (!conversationToUse && response.conversationId) {
-        const updatedConversations = await chatService.listConversations(user.chatId);
-        setConversations(updatedConversations);
-
-        const newConversation = updatedConversations.find(c => c.id === response.conversationId);
-        if (newConversation) {
-          setSelectedConversation(newConversation);
+        if (API_VERSION === 'v2') {
+          const data = await conversationServiceV2.listConversations(user.chatId);
+          const updatedConversations = data.map((conv : any) => ({
+            ...conv,
+            createdAt: conv.updatedAt
+          }));
+          setConversations(updatedConversations);
+          const newConversation = updatedConversations.find((c : any) => c.id === response.conversationId);
+          if (newConversation) {
+            setSelectedConversation(newConversation);
+          }
+        } else {
+          const updatedConversations = await chatService.listConversations(user.chatId);
+          setConversations(updatedConversations);
+          const newConversation = updatedConversations.find(c => c.id === response.conversationId);
+          if (newConversation) {
+            setSelectedConversation(newConversation);
+          }
         }
       }
 
@@ -173,49 +216,44 @@ export default function ChatPage() {
           timestamp: new Date(),
         };
         setMessages((prev) => [...prev, emptyMessage]);
+        setIsLoading(false);
         return;
       }
 
-      const messageIds = answers.map((_, idx) => (Date.now() + idx + 1).toString());
+      const fullAnswer = answers.join('\n\n');
+      const assistantMessageId = (Date.now() + 1).toString();
 
-      const initialMessages: Message[] = messageIds.map((id, idx) => ({
-        id,
-        role: 'assistant' as const,
+      const initialMessage: Message = {
+        id: assistantMessageId,
+        role: 'assistant',
         content: '',
         timestamp: new Date(),
-      }));
+      };
 
-      setMessages((prev) => [...prev, ...initialMessages]);
+      setMessages((prev) => [...prev, initialMessage]);
 
-      let currentAnswerIndex = 0;
       let currentCharIndex = 0;
 
       const streamInterval = setInterval(() => {
-        if (currentAnswerIndex >= answers.length) {
+        if (currentCharIndex >= fullAnswer.length) {
           clearInterval(streamInterval);
+          setIsLoading(false);
           return;
         }
 
-        const currentAnswer = answers[currentAnswerIndex];
-        const currentMessageId = messageIds[currentAnswerIndex];
+        const charsToAdd = Math.min(3, fullAnswer.length - currentCharIndex);
+        currentCharIndex += charsToAdd;
 
-        if (currentCharIndex < currentAnswer.length) {
-          const charsToAdd = Math.min(8, currentAnswer.length - currentCharIndex);
-          currentCharIndex += charsToAdd;
+        const currentContent = fullAnswer.substring(0, currentCharIndex);
 
-          const currentContent = currentAnswer.substring(0, currentCharIndex);
-
-          setMessages((prev) => prev.map(msg =>
-            msg.id === currentMessageId
-              ? { ...msg, content: currentContent }
-              : msg
-          ));
-        } else {
-          currentAnswerIndex++;
-          currentCharIndex = 0;
-        }
-      }, 20);
+        setMessages((prev) => prev.map(msg =>
+          msg.id === assistantMessageId
+            ? { ...msg, content: currentContent }
+            : msg
+        ));
+      }, 30);
     } catch (error: any) {
+      setIsLoading(false);
       setMessages((prev) => prev.map(msg =>
         msg.id === messageId ? { ...msg, status: 'error' as const } : msg
       ));
@@ -227,8 +265,6 @@ export default function ChatPage() {
         timestamp: new Date(),
       };
       setMessages((prev) => [...prev, errorMessage]);
-    } finally {
-      setIsLoading(false);
     }
   };
 

@@ -45,34 +45,10 @@ export default function AdminSidebar({ isDarkMode, activeSection, onSectionChang
 
   const menuItems = [
     {
-      id: 'overview',
-      label: 'Visão Geral',
-      icon: LayoutDashboard,
-      description: 'Dashboard principal'
-    },
-    {
-      id: 'intelligence',
-      label: 'Inteligência',
-      icon: Brain,
-      description: 'Inteligência organizacional'
-    },
-    {
       id: 'agents',
       label: 'Agentes',
       icon: Bot,
       description: 'Sincronizar agentes'
-    },
-    {
-      id: 'training',
-      label: 'Treinamento',
-      icon: BookOpen,
-      description: 'Candidatos pendentes'
-    },
-    {
-      id: 'users',
-      label: 'Usuários',
-      icon: Users,
-      description: 'Gestão de usuários'
     },
   ];
 

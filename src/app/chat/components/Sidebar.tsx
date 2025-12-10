@@ -2,7 +2,7 @@
 
 import { Plus, MessageSquare, Settings, LogOut, ChevronDown, User } from 'lucide-react';
 import Image from 'next/image';
-import { Conversation } from '@/services/chatService';
+import { Conversation } from '@/services/v1/chatService';
 
 interface SidebarProps {
   isDarkMode: boolean;

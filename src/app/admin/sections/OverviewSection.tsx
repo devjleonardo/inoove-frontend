@@ -18,7 +18,7 @@ import {
   ThumbsDown
 } from 'lucide-react';
 import KnowledgeHeatmap from '../components/KnowledgeHeatmap';
-import { dashboardService, AskiaDashboardDTO, ConfidenceDashboardDTO } from '@/services/dashboardService';
+import { dashboardService, AskiaDashboardDTO, ConfidenceDashboardDTO } from '@/services/v1/dashboardService';
 
 interface OverviewSectionProps {
   isDarkMode: boolean;

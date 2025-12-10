@@ -5,18 +5,15 @@ import { useAuth } from '@/contexts/AuthContext';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Sun, Moon, MessageSquare } from 'lucide-react';
 import AdminSidebar from './components/AdminSidebar';
-import OverviewSection from './sections/OverviewSection';
-import IntelligenceSection from './sections/IntelligenceSection';
 import AgentsSyncSection from './sections/AgentsSyncSection';
-import TrainingCandidatesSection from './sections/TrainingCandidatesSection';
 
 export default function AdminPage() {
   const { user, isAuthenticated } = useAuth();
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(true);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  const [activeSection, setActiveSection] = useState('overview');
-  const [navigationHistory, setNavigationHistory] = useState<string[]>(['overview']);
+  const [activeSection, setActiveSection] = useState('agents');
+  const [navigationHistory, setNavigationHistory] = useState<string[]>(['agents']);
 
   useEffect(() => {
     const savedTheme = localStorage.getItem('askia-theme');
@@ -73,20 +70,7 @@ export default function AdminPage() {
   const canGoBack = navigationHistory.length > 1;
 
   const getSectionTitle = () => {
-    switch (activeSection) {
-      case 'overview':
-        return 'Visão Geral';
-      case 'intelligence':
-        return 'Inteligência Organizacional';
-      case 'agents':
-        return 'Sincronização de Agentes';
-      case 'training':
-        return 'Candidatos de Treinamento';
-      case 'users':
-        return 'Usuários';
-      default:
-        return 'Dashboard';
-    }
+    return 'Sincronização de Agentes';
   };
 
   if (isLoading) {
@@ -162,20 +146,7 @@ export default function AdminPage() {
 
         <main className="flex-1 overflow-y-auto p-6">
           <div className="max-w-7xl mx-auto">
-            {activeSection === 'overview' && <OverviewSection isDarkMode={isDarkMode} />}
-            {activeSection === 'intelligence' && <IntelligenceSection isDarkMode={isDarkMode} />}
-            {activeSection === 'agents' && <AgentsSyncSection isDarkMode={isDarkMode} />}
-            {activeSection === 'training' && <TrainingCandidatesSection isDarkMode={isDarkMode} />}
-            {activeSection === 'users' && (
-              <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-xl p-6 border border-gray-200 dark:border-gray-700">
-                <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-4">
-                  Gestão de Usuários
-                </h2>
-                <p className="text-sm text-gray-600 dark:text-gray-400">
-                  Em desenvolvimento...
-                </p>
-              </div>
-            )}
+            <AgentsSyncSection isDarkMode={isDarkMode} />
           </div>
         </main>
       </div>

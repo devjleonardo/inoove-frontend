@@ -18,7 +18,7 @@ import {
   Users,
   Activity
 } from 'lucide-react';
-import { intelligenceDashboardService, AskiaIntelligenceDashboardDTO } from '@/services/intelligenceDashboardService';
+import { intelligenceDashboardService, AskiaIntelligenceDashboardDTO } from '@/services/v1/intelligenceDashboardService';
 
 interface IntelligenceSectionProps {
   isDarkMode: boolean;

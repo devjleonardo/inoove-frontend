@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Loader, CheckCircle, XCircle, BookOpen, MessageSquare, Calendar, ArrowRight } from 'lucide-react';
-import { trainingCandidateService, TrainingCandidate } from '@/services/trainingCandidateService';
+import { trainingCandidateService, TrainingCandidate } from '@/services/v1/trainingCandidateService';
 
 interface TrainingCandidatesSectionProps {
   isDarkMode: boolean;

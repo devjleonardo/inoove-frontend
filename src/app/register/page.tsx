@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Sparkles, ArrowRight, Sun, Moon } from 'lucide-react';
-import { accountService } from '@/services/accountService';
+import { accountService } from '@/services/v1/accountService';
 import { useAuth } from '@/contexts/AuthContext';
 
 const BUSINESS_UNITS = [

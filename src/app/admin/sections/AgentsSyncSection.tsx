@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { Bot, Loader, CheckCircle, XCircle, RefreshCw } from 'lucide-react';
-import { agentService, Agent } from '@/services/agentService';
+import { agentService, Agent } from '@/services/v1/agentService';
 import { useAuth } from '@/contexts/AuthContext';
 
 interface AgentsSyncSectionProps {

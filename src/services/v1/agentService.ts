@@ -1,4 +1,8 @@
 import api from './api';
+import apiV2 from '../v2/apiV2';
+
+const API_VERSION = process.env.NEXT_PUBLIC_API_VERSION || 'v1';
+const apiInstance = API_VERSION === 'v2' ? apiV2 : api;
 
 export interface Agent {
   id: string;
@@ -24,12 +28,12 @@ export interface Training {
 
 class AgentService {
   async listAgents(): Promise<Agent[]> {
-    const response = await api.get<Agent[]>('/v1/agents');
+    const response = await apiInstance.get<Agent[]>('/v1/admin/agents');
     return response.data;
   }
 
   async getAgent(agentId: string): Promise<Agent> {
-    const response = await api.get<Agent>(`/v1/agents/${agentId}`);
+    const response = await apiInstance.get<Agent>(`/v1/admin/agents/${agentId}`);
     return response.data;
   }
 
@@ -37,7 +41,7 @@ class AgentService {
     const formData = new FormData();
     formData.append('file', file);
 
-    const response = await api.post<Training[]>(
+    const response = await apiInstance.post<Training[]>(
       `/v1/agents/${agentId}/training`,
       formData,
       {
@@ -55,7 +59,7 @@ class AgentService {
       formData.append('files', file);
     });
 
-    const response = await api.post<Training[]>(
+    const response = await apiInstance.post<Training[]>(
       `/v1/agents/${agentId}/training/batch`,
       formData,
       {
@@ -68,12 +72,12 @@ class AgentService {
   }
 
   async listTrainings(agentId: string): Promise<Training[]> {
-    const response = await api.get<Training[]>(`/v1/agents/${agentId}/training`);
+    const response = await apiInstance.get<Training[]>(`/v1/agents/${agentId}/training`);
     return response.data;
   }
 
   async syncAgents(workspaceId: string): Promise<Agent[]> {
-    const response = await api.post<Agent[]>(`/v1/agents/sync`, null, {
+    const response = await apiInstance.post<Agent[]>(`/v1/admin/agents/sync`, null, {
       params: { workspaceId }
     });
     return response.data;

@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { AccountResponseDTO } from '@/services/accountService';
+import { AccountResponseDTO } from '@/services/v1/accountService';
 
 interface AuthContextType {
   user: AccountResponseDTO | null;

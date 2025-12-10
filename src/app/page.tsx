@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { Sparkles, ArrowRight, Zap, Brain, MessageCircle, Sun, Moon } from 'lucide-react';
-import { authService } from '@/services/authService';
+import { authService } from '@/services/v1/authService';
 import { useAuth } from '@/contexts/AuthContext';
 import Image from 'next/image';
 

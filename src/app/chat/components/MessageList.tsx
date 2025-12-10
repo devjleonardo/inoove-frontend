@@ -144,7 +144,7 @@ export default function MessageList({ messages, isLoading, isDarkMode, messagesE
         </div>
       ))}
 
-      {isLoading && (
+      {isLoading && messages.length > 0 && messages[messages.length - 1]?.role !== 'assistant' && (
         <div className="flex justify-start animate-in fade-in slide-in-from-bottom-4 duration-300">
           <div className="flex gap-3 max-w-[80%]">
             <div className="flex-shrink-0 mt-1">
